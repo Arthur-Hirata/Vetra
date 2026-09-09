@@ -1,0 +1,47 @@
+# Dependencies and virtual environments
+node_modules/
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+
+# Build and test output
+dist/
+build/
+.vite/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Environment files and local secrets
+.env
+.env.*
+!.env.example
+
+# Logs and local runtime files
+*.log
+*.pid
+*.seed
+
+# Editor and operating system files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python packaging artifacts
+*.egg-info/
+*.egg
+.eggs/
+wheelhouse/
+
+# TypeScript/Vite cache
+*.tsbuildinfo
