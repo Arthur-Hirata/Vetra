@@ -6,7 +6,7 @@ interface ButtonProps{
 
 function Button({children, onClick, className}: ButtonProps){
     return (
-        <button className={`${className} rounded-2xl bg-primary text-white w-30 h-7`}
+        <button className={`${className} rounded-2xl bg-primary text-white w-30 h-7 transition:transform duration-300 hover:scale-105`}
         
         onClick={onClick}>
             {children}
