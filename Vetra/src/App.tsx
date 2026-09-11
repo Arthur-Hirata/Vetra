@@ -1,12 +1,13 @@
-import Navbar from './App/Navbar'
+
 import './App.css'
+import Home from './App/Home'
 
 function App() {
 
   return (
     <>
     <div className='bg-background pt min-h-screen text-text font-poppins w-full border border-border flex flex-col items-center'>
-      <Navbar />
+      <Home />
     </div>
     </>
   )
