@@ -1,10 +1,8 @@
 import Button from "./Button"
-
+import { useNavigate } from "react-router-dom"
 
 function Navbar(){
-    function teste(){
-        alert("oi")
-    }
+    const navigate = useNavigate()
     return (
         <nav className="bg-cards w-full h-20 flex items-center justify-between sticky top-0 z-50">
             <div>
@@ -13,7 +11,7 @@ function Navbar(){
             </div>
             <div className="flex gap-20">
                 <button className="transition:transform duration-300 hover:scale-105"><i className="fa-solid fa-cart-shopping"></i></button>
-                <Button  children={"Login"} onClick={teste} className="mr-10"/>
+                <Button  children={"Login"} onClick={()=> navigate('/login')} className="mr-10"/>
             </div>
         </nav>
     )
