@@ -2,16 +2,26 @@
 
 
 @theme {
-  --color-background: #F3F7F7;
+   --color-background: #F7F9FB;
+
   --color-cards: #FFFFFF;
-  --color-text: #172A2D;
-  --color-primary: #167D82;
-  --color-hover: #11656A;
-  --color-secondary: #E89B4A;
-  --color-text-secondary: #66777A;
-  --color-sucess: #3D9960;
-  --color-error: #D9534F;
+  --color-card-secondary: #F0F4F8;
+  --color-card-accent: #E5EDF5;
+
+  --color-input: #F3F6F9;
+  --color-border: #DEE6EE;
+
+  --color-text: #1E293B;
+  --color-text-secondary: #64748B;
+
+  --color-primary: #4F7CAC;
+  --color-hover: #3F668A;
+  --color-secondary: #8FB8D8;
+
+  --color-sucess: #5C9B6F;
+  --color-error: #D45B5B;
+
   --font-poppins: "Poppins", sans-serif;
-  --color-border: #E7EEEE;
-  --shadow-card: 0px 20px 45px rgba(23, 42, 45, 0.08);
+
+  --shadow-card: 0px 10px 30px rgba(30, 41, 59, 0.06);
 }
