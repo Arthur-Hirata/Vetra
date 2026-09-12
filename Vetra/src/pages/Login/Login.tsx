@@ -1,9 +1,11 @@
 import Input from "../../Components/Input"
 import Button from "../../Components/Button"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 
 export default function Login(){
+    const navigate = useNavigate()
     const [userEmail, setUserEmail] = useState("")
     const [userPassword, setUserPassword] = useState("")
 
@@ -22,7 +24,7 @@ export default function Login(){
                         <Input placeholder="Digite seu e-mail" subTittle="E-mail" type="text" onChange={(e)=> setUserEmail(e.target.value)}/>
                         <Input placeholder="Digite sua senha" type="password" subTittle="Senha" onChange={(e) => setUserPassword(e.target.value) }/>
                     </div>
-                    <a href=""><span className="text-blue-500 flex text-sm hover:cursor-pointer">Não tem uma conta? Crie agora.</span></a>
+                    <span className="text-blue-500 flex text-sm hover:cursor-pointer" onClick={()=> navigate('/create')}>Não tem uma conta? Crie agora.</span>
                     <div className="flex flex-row gap-3">
                         <input type="checkbox" />
                         <span className="text-sm">Manter-se conectado</span>
