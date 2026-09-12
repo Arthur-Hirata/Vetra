@@ -1,12 +1,13 @@
-import { useState } from "react"
+import { useState, type ChangeEvent } from "react"
 
 interface InputProps{
     placeholder: string
     type: string
     subTittle: string
+    onChange?: (event : ChangeEvent<HTMLInputElement>) => void
 }
 
-export default function Input({ placeholder, type, subTittle }: InputProps) {
+export default function Input({ placeholder, type, subTittle, onChange }: InputProps) {
     const [inputType, setInputType] = useState('password')
     if (type === 'password'){
 
@@ -19,6 +20,7 @@ export default function Input({ placeholder, type, subTittle }: InputProps) {
                 type={inputType}
                 placeholder={placeholder}
                 className="h-12 w-90 rounded-xl border border-border bg-input px-4 text-sm text-text placeholder:text-text-secondary shadow-[0_4px_12px_rgba(30,41,59,0.03)] transition-all duration-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                onChange={onChange}
             />
             <button  className="-ml-10 mt-1"type="button" onClick={() => setInputType(inputType === 'password' ? "text" : "password")}><i className={inputType === "password" ? "fas fa-eye-slash" : "fas fa-eye"}></i></button>
             </div>
@@ -34,6 +36,7 @@ export default function Input({ placeholder, type, subTittle }: InputProps) {
                 type={type}
                 placeholder={placeholder}
                 className="h-12 w-90 rounded-xl border border-border bg-input px-4 text-sm text-text placeholder:text-text-secondary shadow-[0_4px_12px_rgba(30,41,59,0.03)] transition-all duration-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                onChange={onChange}
             />
             </label>
         </div>
