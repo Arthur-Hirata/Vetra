@@ -20,10 +20,12 @@ async def register(user:userAuth):
     response = supabase.table("users").insert({
         "email" : email,
         "password_hash" : password_hash
-    }).execute
+    }).execute()
+    print(response)
 
     return {
-        "mensagem" : "usuário cadastrado"
+        "mensagem" : "usuário cadastrado, deu certo",
+        "response" : response
     }
 
 @router.post("/login")

@@ -11,7 +11,7 @@ export default function AccountCreate(){
     const [confirmPasswordError, setConfirmPasswordError] = useState("")
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
-    function createAcc(){
+    async function createAcc(){
         setEmailError("")
         setPasswordError("")
         setConfirmPasswordError("")
@@ -31,7 +31,10 @@ export default function AccountCreate(){
         }
         if (isValid){
             try{
-                
+                const data = await register(userEmail, userPassword)
+                console.log(data)
+            }catch (error){
+                console.log(error)
             }
         }
     }
