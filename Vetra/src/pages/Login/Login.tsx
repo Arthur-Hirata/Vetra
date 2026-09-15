@@ -2,7 +2,7 @@ import Input from "../../Components/Input"
 import Button from "../../Components/Button"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-
+import { login } from "../../services/api"
 
 export default function Login(){
     const navigate = useNavigate()
@@ -12,7 +12,7 @@ export default function Login(){
 
     const [emailError, setEmailError] = useState("")
     const [passwordError, setPasswordError]= useState("")
-    function teste(){
+    async function handleLogin(){
         let isValid = true
         setEmailError("")
         setPasswordError("")
@@ -29,7 +29,12 @@ export default function Login(){
             console.log(userEmail)
             console.log(userPassword)
             console.log(rememberUser)
-
+            try {
+                const data = await login(userEmail, userPassword);
+                console.log(data)
+            }catch (error){
+                console.log(error)
+            }
             
         }
 
@@ -57,7 +62,7 @@ export default function Login(){
                         <span className="pointer-events-none absolute left-1 top-1/2 hidden -translate-y-1/2 text-xs font-bold text-white peer-checked:block">✓</span>
                     </label>
                 </div>
-                <Button children={"Login"} className="mt-15 w-50 h-10"  onClick={teste}/>
+                <Button children={"Login"} className="mt-15 w-50 h-10"  onClick={handleLogin}/>
             </div>
         </div>
     )
