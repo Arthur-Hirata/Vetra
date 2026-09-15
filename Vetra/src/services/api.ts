@@ -19,3 +19,22 @@ export async function login(email:string, password: string) {
     } 
     return data
 }
+
+export async function register(email:string, password:string) {
+    const response = await fetch(`${API_URL}/auth/register`, {
+        method : "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body : JSON.stringify({
+            email: email,
+            password : password
+        })
+    })
+    const data = await response.json()
+    if (!response.ok){
+        throw new Error(data.mensagem || "Erro ao criar conta")
+    }
+    return data
+    
+}

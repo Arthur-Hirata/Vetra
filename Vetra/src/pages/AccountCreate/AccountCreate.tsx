@@ -1,6 +1,7 @@
 import Input from "../../Components/Input"
 import Button from "../../Components/Button"
 import { useState } from "react"
+import { register } from "../../services/api"
 export default function AccountCreate(){
     const [userEmail, setUserEmail] = useState("")
     const [userPassword, setUserPassword] = useState("")
@@ -29,7 +30,9 @@ export default function AccountCreate(){
             isValid = false
         }
         if (isValid){
-            alert("ta podendo criar")
+            try{
+                
+            }
         }
     }
     return(
