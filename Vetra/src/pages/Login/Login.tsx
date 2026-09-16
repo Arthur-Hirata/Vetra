@@ -26,22 +26,29 @@ export default function Login(){
         }
         if (isValid){
             const rememberUser = field ? "lembrar" : "não lembrar"
-            console.log(userEmail)
-            console.log(userPassword)
             console.log(rememberUser)
             try {
                 const data = await login(userEmail, userPassword);
-                if (data.mensagem === "Usuário loggado com sucesso"){
+                if (data.message === "Usuário loggado com sucesso"){
                     alert("deu certo")
-                }
-                if (data.mensagem === "senha incorreta"){
-                    alert("senha errada")
-                }
-                if (data.mensagem === "Usuário não encontrado"){
-                    alert("user not exist")
+                    setUserEmail("")
+                    setUserPassword("")
+
                 }
             }catch (error){
-                console.log(error)
+                console.log("Erro no login", error)
+                if (error instanceof Error){
+                    console.log(error.message)
+                    if (error.message === "Senha incorreta"){
+                        setUserPassword("")
+                        setPasswordError("Senha incorreta")
+                    }
+                    if (error.message === "Usuário não encontrado"){
+                        setUserEmail("")
+                        setEmailError("Usuário não encontrado")
+                    }
+                    
+                }
             }
             
         }

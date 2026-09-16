@@ -26,7 +26,7 @@ export default function Input({ placeholder, type, subTittle, classname, spanErr
             />
             <button  className="-ml-10 mt-1"type="button" onClick={() => setInputType(inputType === 'password' ? "text" : "password")}><i className={inputType === "password" ? "fas fa-eye-slash" : "fas fa-eye"}></i></button>
             </div>
-            <span className="text-[10px] text-red-600 -mt-1">{spanError}</span>
+            <span className="text-[12px] text-red-600 -mt-1">{spanError}</span>
         </label>
             </div>
         )

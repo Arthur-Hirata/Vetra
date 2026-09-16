@@ -15,7 +15,7 @@ export async function login(email:string, password: string) {
     })
     const data = await response.json()
     if (!response.ok){
-        throw new Error(data.mensagem || "Erro ao fazer login")
+        throw new Error(data.mensagem || data.message || "Erro ao fazer login")
     } 
     return data
 }
@@ -33,7 +33,7 @@ export async function register(email:string, password:string) {
     })
     const data = await response.json()
     if (!response.ok){
-        throw new Error(data.mensagem || "Erro ao criar conta")
+        throw new Error(data.mensagem || data.message || "Erro ao criar conta")
     }
     return data
     

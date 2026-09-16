@@ -24,7 +24,7 @@ async def register(user:userAuth):
     }).execute()
 
     return {
-        "mensagem" : "usuário cadastrado, deu certo",
+        "message" : "usuário cadastrado, deu certo",
         "response" : response
     }
 
@@ -38,16 +38,16 @@ async def login(user: userAuth):
     if not response.data:
         return JSONResponse(
             status_code=404,
-            content={"mensagem" : "Usuário não encontrado"})
+            content={"message" : "Usuário não encontrado"})
     
     password_hash = response.data[0]["password_hash"]
 
     if check_password_hash(password_hash, password):
-        return {"mensagem" : "Usuário loggado com sucesso"}
+        return {"message" : "Usuário loggado com sucesso"}
     else:
         return JSONResponse(
             status_code=401,
-            content={"mensagem" : "Senha incorreta"}
+            content={"message" : "Senha incorreta"}
         )
 
 
