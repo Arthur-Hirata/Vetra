@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from app.config import SECRET_KEY
 from app.database import supabase
 from pydantic import BaseModel
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 router = APIRouter()
 
 class userAuth(BaseModel):
@@ -30,6 +30,16 @@ async def register(user:userAuth):
 
 @router.post("/login")
 async def login(user: userAuth):
+    email = user.email
+    password = user.password
 
-    return 
+    response = supabase.table("users").select("password").eq("email", email).execute()
+
+    password_hash = response.data[0]["password"]
+
+    if check_password_hash(password_hash, password):
+        return {"mensagem" : "Usuário loggado com sucesso"}, 200
+    else:
+        return {"mensagem" : "senha incorreta"}, 401
+
 
