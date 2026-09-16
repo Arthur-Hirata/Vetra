@@ -31,7 +31,15 @@ export default function Login(){
             console.log(rememberUser)
             try {
                 const data = await login(userEmail, userPassword);
-                console.log(data)
+                if (data.mensagem === "Usuário loggado com sucesso"){
+                    alert("deu certo")
+                }
+                if (data.mensagem === "senha incorreta"){
+                    alert("senha errada")
+                }
+                if (data.mensagem === "Usuário não encontrado"){
+                    alert("user not exist")
+                }
             }catch (error){
                 console.log(error)
             }

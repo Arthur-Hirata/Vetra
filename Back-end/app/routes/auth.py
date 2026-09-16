@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from fastapi.responses import JSONResponse
 from app.config import SECRET_KEY
 from app.database import supabase
 from pydantic import BaseModel
@@ -21,7 +22,6 @@ async def register(user:userAuth):
         "email" : email,
         "password_hash" : password_hash
     }).execute()
-    print(response)
 
     return {
         "mensagem" : "usuário cadastrado, deu certo",
@@ -33,13 +33,21 @@ async def login(user: userAuth):
     email = user.email
     password = user.password
 
-    response = supabase.table("users").select("password").eq("email", email).execute()
+    response = supabase.table("users").select("password_hash").eq("email", email).execute()
 
-    password_hash = response.data[0]["password"]
+    if not response.data:
+        return JSONResponse(
+            status_code=404,
+            content={"mensagem" : "Usuário não encontrado"})
+    
+    password_hash = response.data[0]["password_hash"]
 
     if check_password_hash(password_hash, password):
-        return {"mensagem" : "Usuário loggado com sucesso"}, 200
+        return {"mensagem" : "Usuário loggado com sucesso"}
     else:
-        return {"mensagem" : "senha incorreta"}, 401
+        return JSONResponse(
+            status_code=401,
+            content={"mensagem" : "Senha incorreta"}
+        )
 
 
