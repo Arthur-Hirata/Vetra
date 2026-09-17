@@ -3,12 +3,14 @@ import Button from "../../Components/Button"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { login } from "../../services/api"
-
+import Toast from "../../Components/Toast"
 export default function Login(){
     const navigate = useNavigate()
     const [userEmail, setUserEmail] = useState("")
     const [userPassword, setUserPassword] = useState("")
     const[field, setField] = useState(false)
+    const [toast, setToast] = useState(false)
+
 
     const [emailError, setEmailError] = useState("")
     const [passwordError, setPasswordError]= useState("")
@@ -30,10 +32,9 @@ export default function Login(){
             try {
                 const data = await login(userEmail, userPassword);
                 if (data.message === "Usuário loggado com sucesso"){
-                    alert("deu certo")
                     setUserEmail("")
                     setUserPassword("")
-
+                    setToast(true)
                 }
             }catch (error){
                 console.log("Erro no login", error)
@@ -52,7 +53,6 @@ export default function Login(){
             }
             
         }
-
     }
     return(
         <div className="bg-background w-full min-h-screen flex items-center justify-center px-6">
@@ -78,6 +78,7 @@ export default function Login(){
                     </label>
                 </div>
                 <Button children={"Login"} className="mt-15 w-50 h-10"  onClick={handleLogin}/>
+                {toast && <Toast title="Sucesso" content="Login feito com sucesso." buttonText="Continuar" onButtonClick={()=> navigate("/")}/>}
             </div>
         </div>
     )

@@ -3,6 +3,7 @@ interface ToastProps {
     content: string
     buttonText: string
     onButtonClick?: () => void
+    onClose?: () => void
 }
 
 export default function Toast({title, content, buttonText, onButtonClick}: ToastProps) {
@@ -24,7 +25,6 @@ export default function Toast({title, content, buttonText, onButtonClick}: Toast
                 >
                     {buttonText}
                 </button>
-
             </div>
         </div>
     )

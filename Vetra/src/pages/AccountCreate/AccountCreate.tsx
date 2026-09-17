@@ -3,7 +3,9 @@ import Button from "../../Components/Button"
 import Toast from "../../Components/Toast"
 import { useState } from "react"
 import { register } from "../../services/api"
+import { useNavigate } from "react-router-dom"
 export default function AccountCreate(){
+    const navigate = useNavigate()
     const [userEmail, setUserEmail] = useState("")
     const [userPassword, setUserPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
@@ -11,8 +13,8 @@ export default function AccountCreate(){
     const [passwordError, setPasswordError] = useState("")
     const [confirmPasswordError, setConfirmPasswordError] = useState("")
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-
-    async function createAcc(){
+    const [toast, setToast] = useState(false)
+    async function createAcc (){
         setEmailError("")
         setPasswordError("")
         setConfirmPasswordError("")
@@ -34,6 +36,7 @@ export default function AccountCreate(){
             try{
                 const data = await register(userEmail, userPassword)
                 console.log(data)
+                setToast(true)
             }catch (error){
                 console.log(error)
             }
@@ -41,7 +44,7 @@ export default function AccountCreate(){
     }
     return(
         <div className="bg-background w-full min-h-screen flex items-center justify-center px-6">
-            <Toast title="Sucesso!" content="Sua conta foi criada." buttonText="Continuar" />
+            
             <div className="bg-cards w-120 h-135 rounded-[28px] shadow-card border border-border flex flex-col items-center justify-start pt-10">
             <span className="text-center text-4xl font-semibold tracking-[0.28em] text-text uppercase">
                     <span className="">Criar</span>
@@ -52,6 +55,7 @@ export default function AccountCreate(){
                     <Input placeholder="Confirme sua senha" subTittle="Confirme sua senha" type="password" onChange={(e) => setConfirmPassword(e.target.value)} classname={confirmPasswordError ? "border-red-600" : ""} spanError={confirmPasswordError} />
                 </div>
                 <Button children="Criar" onClick={createAcc} className="mt-15 w-50 h-10" />
+                {toast && <Toast title="Sucesso" content="Sua conta foi criada com sucesso" buttonText="Continuar" onButtonClick={()=> navigate("/")}/>}
             </div>
         </div>
     )
