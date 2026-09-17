@@ -27,10 +27,9 @@ export default function Login(){
             isValid = false
         }
         if (isValid){
-            const rememberUser = field ? "lembrar" : "não lembrar"
-            console.log(rememberUser)
+            const rememberUser = field ? true : false
             try {
-                const data = await login(userEmail, userPassword);
+                const data = await login(userEmail, userPassword, rememberUser);
                 if (data.message === "Usuário loggado com sucesso"){
                     setUserEmail("")
                     setUserPassword("")
@@ -78,7 +77,7 @@ export default function Login(){
                     </label>
                 </div>
                 <Button children={"Login"} className="mt-15 w-50 h-10"  onClick={handleLogin}/>
-                {toast && <Toast title="Sucesso" content="Login feito com sucesso." buttonText="Continuar" onButtonClick={()=> navigate("/")}/>}
+                {toast && <Toast title="Sucesso" content="Login feito com sucesso." buttonText="Continuar" />}
             </div>
         </div>
     )

@@ -1,16 +1,18 @@
 
-const API_URL = "http://127.0.0.1:8000"
+const API_URL = "http://localhost:8000"
 
 
-export async function login(email:string, password: string) {
+export async function login(email:string, password: string, remember: boolean) {
     const response = await fetch(`${API_URL}/auth/login`,{
         method : "POST",
         headers: {
             "Content-Type": "application/json",
         },
+        credentials : "include",
         body : JSON.stringify({
             email:email,
-            password : password
+            password : password,
+            remember : remember
         }),
     })
     const data = await response.json()
@@ -28,7 +30,7 @@ export async function register(email:string, password:string) {
         },
         body : JSON.stringify({
             email: email,
-            password : password
+            password : password,
         })
     })
     const data = await response.json()

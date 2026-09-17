@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Response
 from fastapi.responses import JSONResponse
 from app.config import SECRET_KEY
 from app.database import supabase
@@ -6,13 +6,13 @@ from pydantic import BaseModel
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta, timezone
 import jwt
+from typing import Optional
 router = APIRouter()
 
 class userAuth(BaseModel):
     email:str
     password : str
-
-
+    remember : Optional[bool] = None
 
 @router.post("/register")
 async def register(user:userAuth):
@@ -31,32 +31,41 @@ async def register(user:userAuth):
     }
 
 @router.post("/login")
-async def login(user: userAuth):
+async def login(user: userAuth, response : Response):
     email = user.email
     password = user.password
 
-    response = supabase.table("users").select("password_hash").eq("email", email).execute()
+    db_response = supabase.table("users").select("password_hash").eq("email", email).execute()
 
-    if not response.data:
+    if not db_response.data:
         return JSONResponse(
             status_code=404,
             content={"message" : "Usuário não encontrado"})
     
-    password_hash = response.data[0]["password_hash"]
+    password_hash = db_response.data[0]["password_hash"]
 
     if check_password_hash(password_hash, password):
         usuario = supabase.table("users").select("id, role").eq("email", email).execute()
         user_id = usuario.data[0]['id']
         user_role = usuario.data[0]['role']
-
+        max_idade_cookie = 345600 if user.remember else 7200
         payload ={
             'sub' : str(user_id),
             'email' : email,
             'role' : user_role,
-            'exp' :datetime.now(timezone.utc) + timedelta(hours=48)
+            'exp' :datetime.now(timezone.utc) + timedelta(hours= 96 if user.remember else 2 )
         }
         jwt_Token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
-        return {"message" : "Usuário loggado com sucesso", "token_jwt" : jwt_Token}
+        response.set_cookie(
+            key = "access_token",
+            value = f"Bearer {jwt_Token}",
+            httponly = True,
+            max_age = max_idade_cookie,
+            expires = max_idade_cookie,
+            samesite = "lax",
+            secure = False
+        )
+        return {"message" : "Usuário loggado com sucesso"}
     else:
         return JSONResponse(
             status_code=401,
