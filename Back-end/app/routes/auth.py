@@ -58,10 +58,9 @@ async def login(user: userAuth, response : Response):
         jwt_Token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
         response.set_cookie(
             key = "access_token",
-            value = f"Bearer {jwt_Token}",
+            value = f"Bearer {jwt_Token}".strip(),
             httponly = True,
             max_age = max_idade_cookie,
-            expires = max_idade_cookie,
             samesite = "lax",
             secure = False
         )
