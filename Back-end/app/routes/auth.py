@@ -4,6 +4,8 @@ from app.config import SECRET_KEY
 from app.database import supabase
 from pydantic import BaseModel
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime, timedelta, timezone
+import jwt
 router = APIRouter()
 
 class userAuth(BaseModel):
@@ -43,7 +45,18 @@ async def login(user: userAuth):
     password_hash = response.data[0]["password_hash"]
 
     if check_password_hash(password_hash, password):
-        return {"message" : "Usuário loggado com sucesso"}
+        usuario = supabase.table("users").select("id, role").eq("email", email).execute()
+        user_id = usuario.data[0]['id']
+        user_role = usuario.data[0]['role']
+
+        payload ={
+            'sub' : str(user_id),
+            'email' : email,
+            'role' : user_role,
+            'exp' :datetime.now(timezone.utc) + timedelta(hours=48)
+        }
+        jwt_Token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+        return {"message" : "Usuário loggado com sucesso", "token_jwt" : jwt_Token}
     else:
         return JSONResponse(
             status_code=401,
