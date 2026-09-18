@@ -40,3 +40,16 @@ export async function register(email:string, password:string) {
     return data
     
 }
+
+export async function getCurrentUser() {
+    const response = await fetch(`${API_URL}/auth/userValidation`, {
+        method : "POST",
+        credentials : "include"
+    })
+    const data = await response.json() 
+    
+    if (!response.ok){
+        throw new Error(data.messagem || "Não autenticado")
+    }
+    return data
+}

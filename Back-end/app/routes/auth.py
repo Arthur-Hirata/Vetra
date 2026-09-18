@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, Response, Request
 from fastapi.responses import JSONResponse
 from app.config import SECRET_KEY
 from app.database import supabase
@@ -13,6 +13,33 @@ class userAuth(BaseModel):
     email:str
     password : str
     remember : Optional[bool] = None
+
+@router.post("/userValidation")
+async def userValidation(request: Request):
+    cookie = request.cookies.get("access_token")
+
+    if not cookie:
+        return JSONResponse(
+            status_code=401,
+            content={"message" : "Token ausente"}
+        )
+    token = cookie.removeprefix("Bearer ")
+    try:
+        payload = jwt.decode(
+            token,
+            SECRET_KEY,
+            algorithms=["HS256"]
+        )
+        return {
+            "authenticated" : True,
+            "user" : payload
+        }
+    except jwt.ExpiredSignatureError:
+        return JSONResponse(
+            status_code=401,
+            content={"message": "Token expirado"}
+        )
+
 
 @router.post("/register")
 async def register(user:userAuth):
