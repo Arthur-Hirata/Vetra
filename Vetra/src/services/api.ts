@@ -22,7 +22,7 @@ export async function login(email:string, password: string, remember: boolean) {
     return data
 }
 
-export async function register(email:string, password:string) {
+export async function register(email:string, password:string, name:string) {
     const response = await fetch(`${API_URL}/auth/register`, {
         method : "POST",
         headers: {
@@ -31,6 +31,7 @@ export async function register(email:string, password:string) {
         body : JSON.stringify({
             email: email,
             password : password,
+            name: name
         })
     })
     const data = await response.json()

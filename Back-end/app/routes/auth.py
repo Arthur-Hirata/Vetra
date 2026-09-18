@@ -13,6 +13,7 @@ class userAuth(BaseModel):
     email:str
     password : str
     remember : Optional[bool] = None
+    name : Optional[str] = None
 
 @router.post("/userValidation")
 async def userValidation(request: Request):
@@ -45,11 +46,13 @@ async def userValidation(request: Request):
 async def register(user:userAuth):
     email = user.email
     password = user.password
+    name = user.name
     password_hash = generate_password_hash(password)
 
     response = supabase.table("users").insert({
         "email" : email,
-        "password_hash" : password_hash
+        "password_hash" : password_hash,
+        "name" : name
     }).execute()
 
     return {
@@ -72,13 +75,15 @@ async def login(user: userAuth, response : Response):
     password_hash = db_response.data[0]["password_hash"]
 
     if check_password_hash(password_hash, password):
-        usuario = supabase.table("users").select("id, role").eq("email", email).execute()
+        usuario = supabase.table("users").select("id, role, name").eq("email", email).execute()
         user_id = usuario.data[0]['id']
         user_role = usuario.data[0]['role']
+        user_name = usuario.data[0]['name']
         max_idade_cookie = 345600 if user.remember else 7200
         payload ={
             'sub' : str(user_id),
             'email' : email,
+            'name' : user_name,
             'role' : user_role,
             'exp' :datetime.now(timezone.utc) + timedelta(hours= 96 if user.remember else 2 )
         }

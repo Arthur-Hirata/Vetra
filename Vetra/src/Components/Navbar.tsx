@@ -12,7 +12,7 @@ function Navbar(){
             try{
                 const data = await getCurrentUser()
                 console.log("usuário autenticado", data.user)
-                setUsername(data.user["email"])
+                setUsername(data.user["name"])
                 setIsAuthenticated(true)
             }catch{
                 console.log("usuário nao autenticado")
