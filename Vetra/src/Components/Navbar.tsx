@@ -1,8 +1,36 @@
 import Button from "./Button"
 import { useNavigate } from "react-router-dom"
-
+import { useEffect, useState } from "react"
+import { getCurrentUser } from "../services/api"
 function Navbar(){
     const navigate = useNavigate()
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [userName, setUsername] = useState("")
+    useEffect(()=>{
+        async function ValidateSession() {
+            console.log("teste")
+            try{
+                const data = await getCurrentUser()
+                console.log("usuário autenticado", data.user)
+                setUsername(data.user["email"])
+                setIsAuthenticated(true)
+            }catch{
+                console.log("usuário nao autenticado")
+                setUsername("")
+                setIsAuthenticated(false)
+            }
+
+        }
+        ValidateSession()
+    })
+    function handleUserClick(){
+        if (isAuthenticated){
+            alert("loggado")
+        }
+        else{
+            navigate("/login")
+        }
+    }
     return (
         <nav className="bg-cards w-full h-20 flex items-center justify-between sticky top-0 z-50">
             <div>
@@ -11,7 +39,7 @@ function Navbar(){
             </div>
             <div className="flex gap-20">
                 <button className="transition:transform duration-300 hover:scale-105"><i className="fa-solid fa-cart-shopping"></i></button>
-                <Button  children={"Login"} onClick={()=> navigate('/login')} className="mr-10"/>
+                <Button  children={isAuthenticated ? userName : "login"} onClick={handleUserClick} className="mr-10"/>
             </div>
         </nav>
     )
