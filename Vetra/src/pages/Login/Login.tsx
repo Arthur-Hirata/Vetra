@@ -47,6 +47,9 @@ export default function Login(){
                         setUserEmail("")
                         setEmailError("Usuário não encontrado")
                     }
+                    if (error.message === "Too many requests"){
+                        alert("muitas requsições")
+                    }
                     
                 }
             }
@@ -77,7 +80,7 @@ export default function Login(){
                     </label>
                 </div>
                 <Button children={"Login"} className="mt-15 w-50 h-10"  onClick={handleLogin}/>
-                {toast && <Toast title="Sucesso" content="Login feito com sucesso." buttonText="Continuar" />}
+                {toast && <Toast title="Sucesso" content="Login feito com sucesso." buttonText="Continuar" onButtonClick={()=> navigate("/")} />}
             </div>
         </div>
     )

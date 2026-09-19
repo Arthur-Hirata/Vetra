@@ -23,7 +23,7 @@ function Navbar(){
     })
     function handleUserClick(){
         if (isAuthenticated){
-            alert("loggado")
+            console.log("loggado")
         }
         else{
             navigate("/login")
