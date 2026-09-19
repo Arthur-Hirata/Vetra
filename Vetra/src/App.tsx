@@ -3,6 +3,7 @@ import MainLayout from './Layout/MainLayout'
 import Home from './pages/Home/Home'
 import Login from './pages/Login/Login'
 import AccountCreate from './pages/AccountCreate/AccountCreate'
+import TooManyRequests from './pages/TooManyRequests/TooManyRequests'
 import './App.css'
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         </Route>
         <Route path="/login"element={<Login/>}/>
         <Route path='/create' element={<AccountCreate />}/>
+        <Route path="/too-many-requests" element={<TooManyRequests/>}/>
       </Routes>
     </div>
     </>

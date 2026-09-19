@@ -6,10 +6,11 @@ interface InputProps{
     subTittle: string
     classname?: string
     spanError?:string
+    value?:string
     onChange?: (event : ChangeEvent<HTMLInputElement>) => void
 }
 
-export default function Input({ placeholder, type, subTittle, classname, spanError, onChange }: InputProps) {
+export default function Input({ placeholder, type, subTittle, classname, spanError, value, onChange }: InputProps) {
     const [inputType, setInputType] = useState('password')
     if (type === 'password'){
 
@@ -20,6 +21,7 @@ export default function Input({ placeholder, type, subTittle, classname, spanErr
             <div className="flex flex-row">
             <input
                 type={inputType}
+                value={value}
                 placeholder={placeholder}
                 className={` ${classname} h-12 w-90 rounded-xl border border-border bg-input px-4 text-sm text-text placeholder:text-text-secondary shadow-[0_4px_12px_rgba(30,41,59,0.03)] transition-all duration-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/10`}
                 onChange={onChange}
@@ -37,6 +39,7 @@ export default function Input({ placeholder, type, subTittle, classname, spanErr
                 <span className="text-medium font-medium text-text-secondary">{subTittle}</span>
                 <input
                 type={type}
+                value={value}
                 placeholder={placeholder}
                 className={ `${classname} h-12 w-90 rounded-xl border border-border bg-input px-4 text-sm text-text placeholder:text-text-secondary shadow-[0_4px_12px_rgba(30,41,59,0.03)] transition-all duration-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 `}
                 onChange={onChange}

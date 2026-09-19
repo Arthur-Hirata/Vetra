@@ -1,6 +1,15 @@
 
 const API_URL = "http://localhost:8000"
-
+class ApiError extends Error{
+    data:{
+        wait_time?:number
+        message?: string
+    }
+    constructor(message:string, data : {wait_time?: number; message?: string}){
+        super(message)
+        this.data = data
+    }
+}
 
 export async function login(email:string, password: string, remember: boolean) {
     const response = await fetch(`${API_URL}/auth/login`,{
@@ -17,7 +26,10 @@ export async function login(email:string, password: string, remember: boolean) {
     })
     const data = await response.json()
     if (!response.ok){
-        throw new Error(data.mensagem || data.message || "Erro ao fazer login")
+        throw new ApiError(
+            data.mensagem || data.message || "Erro ao fazer login",
+            data
+        )
     } 
     return data
 }

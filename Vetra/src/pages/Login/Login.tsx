@@ -4,6 +4,14 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { login } from "../../services/api"
 import Toast from "../../Components/Toast"
+
+
+interface ApiError extends Error {
+    data?:{
+        wait_time?: number
+        message?: string
+    }
+}
 export default function Login(){
     const navigate = useNavigate()
     const [userEmail, setUserEmail] = useState("")
@@ -35,7 +43,7 @@ export default function Login(){
                     setUserPassword("")
                     setToast(true)
                 }
-            }catch (error){
+            }catch (error:unknown){
                 console.log("Erro no login", error)
                 if (error instanceof Error){
                     console.log(error.message)
@@ -48,7 +56,12 @@ export default function Login(){
                         setEmailError("Usuário não encontrado")
                     }
                     if (error.message === "Too many requests"){
-                        alert("muitas requsições")
+                        const apiError = error as ApiError
+                        navigate("/too-many-requests", {
+                            state: {
+                                wait_time: apiError.data?.wait_time
+                            }
+                        })
                     }
                     
                 }
@@ -64,8 +77,8 @@ export default function Login(){
                 </span>
                 <div className="flex flex-col mt-10 gap-3 items-start justify-start w-full px-10">
                     <div className="flex flex-col gap-4">
-                        <Input placeholder="Digite seu e-mail" subTittle="E-mail" type="text" onChange={(e)=> setUserEmail(e.target.value)} classname={emailError ? "border-red-600" : ""} spanError={emailError}/>
-                        <Input placeholder="Digite sua senha" type="password" subTittle="Senha" onChange={(e) => setUserPassword(e.target.value) } classname={passwordError ? "border-red-600" : ""} spanError={passwordError}/>
+                        <Input placeholder="Digite seu e-mail" subTittle="E-mail" type="text" onChange={(e)=> setUserEmail(e.target.value)} classname={emailError ? "border-red-600" : ""} spanError={emailError} value={userEmail}/>
+                        <Input placeholder="Digite sua senha" type="password" subTittle="Senha" onChange={(e) => setUserPassword(e.target.value) } classname={passwordError ? "border-red-600" : ""} spanError={passwordError} value={userPassword}/>
                     </div>
                     <span className="text-blue-500 flex text-sm hover:cursor-pointer" onClick={()=> navigate('/create')}>Não tem uma conta? Crie agora.</span>
                     <label className="relative flex cursor-pointer items-center gap-3 text-text">
