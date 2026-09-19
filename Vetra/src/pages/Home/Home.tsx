@@ -1,7 +1,7 @@
 
 function Home(){
     return(
-        <div>piaysvd</div>
+        <div></div>
     )
 }
 export default Home

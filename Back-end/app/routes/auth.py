@@ -65,20 +65,18 @@ async def login(user: userAuth, response : Response):
     email = user.email
     password = user.password
 
-    db_response = supabase.table("users").select("password_hash").eq("email", email).execute()
+    db_response = supabase.table("users").select("password_hash, id, role, name").eq("email", email).execute()
 
     if not db_response.data:
         return JSONResponse(
             status_code=404,
             content={"message" : "Usuário não encontrado"})
-    
-    password_hash = db_response.data[0]["password_hash"]
-
+    usuario = db_response.data[0]
+    password_hash = usuario["password_hash"]
+    user_id = usuario['id']
+    user_role = usuario['role']
+    user_name = usuario['name']
     if check_password_hash(password_hash, password):
-        usuario = supabase.table("users").select("id, role, name").eq("email", email).execute()
-        user_id = usuario.data[0]['id']
-        user_role = usuario.data[0]['role']
-        user_name = usuario.data[0]['name']
         max_idade_cookie = 345600 if user.remember else 7200
         payload ={
             'sub' : str(user_id),

@@ -8,10 +8,8 @@ function Navbar(){
     const [userName, setUsername] = useState("")
     useEffect(()=>{
         async function ValidateSession() {
-            console.log("teste")
             try{
                 const data = await getCurrentUser()
-                console.log("usuário autenticado", data.user)
                 setUsername(data.user["name"])
                 setIsAuthenticated(true)
             }catch{
@@ -39,7 +37,7 @@ function Navbar(){
             </div>
             <div className="flex gap-20">
                 <button className="transition:transform duration-300 hover:scale-105"><i className="fa-solid fa-cart-shopping"></i></button>
-                <Button  children={isAuthenticated ? userName : "login"} onClick={handleUserClick} className="mr-10"/>
+                <Button  children={isAuthenticated ? userName : "Login"} onClick={handleUserClick} className="mr-10"/>
             </div>
         </nav>
     )
