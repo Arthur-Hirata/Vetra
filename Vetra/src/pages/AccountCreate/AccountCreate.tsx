@@ -4,6 +4,12 @@ import Toast from "../../Components/Toast"
 import { useState } from "react"
 import { register } from "../../services/api"
 import { useNavigate } from "react-router-dom"
+interface ApiError extends Error {
+    data?:{
+        wait_time?: number
+        message?: string
+    }
+}
 export default function AccountCreate(){
     const navigate = useNavigate()
     const [userName, setUserName] = useState("")
@@ -44,8 +50,20 @@ export default function AccountCreate(){
                 const data = await register(userEmail, userPassword, userName)
                 console.log(data)
                 setToast(true)
-            }catch (error){
-                console.log(error)
+            }catch (error:unknown){
+                if (error instanceof Error){
+                    if (error.message === "Usuário já cadastrado"){
+                        setEmailError("Usuário já cadastrado")
+                    }
+                    if (error.message === "Too many requests"){
+                        const apiError = error as ApiError
+                        navigate("/too-many-requests", {
+                            state: {
+                                wait_time: apiError.data?.wait_time
+                            }
+                        })
+                    }
+                }
             }
         }
     }

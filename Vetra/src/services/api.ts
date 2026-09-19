@@ -48,8 +48,11 @@ export async function register(email:string, password:string, name:string) {
     })
     const data = await response.json()
     if (!response.ok){
-        throw new Error(data.mensagem || data.message || "Erro ao criar conta")
-    }
+        throw new ApiError(
+            data.mensagem || data.message || "Erro ao fazer login",
+            data
+        )
+    } 
     return data
     
 }

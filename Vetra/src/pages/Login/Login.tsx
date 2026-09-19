@@ -44,9 +44,7 @@ export default function Login(){
                     setToast(true)
                 }
             }catch (error:unknown){
-                console.log("Erro no login", error)
                 if (error instanceof Error){
-                    console.log(error.message)
                     if (error.message === "Senha incorreta"){
                         setUserPassword("")
                         setPasswordError("Senha incorreta")

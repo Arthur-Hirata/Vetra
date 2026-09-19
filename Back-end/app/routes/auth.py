@@ -8,6 +8,7 @@ from datetime import datetime, timedelta, timezone
 import jwt
 from typing import Optional
 from functools import wraps
+from postgrest.exceptions import APIError
 router = APIRouter()
 
 class userAuth(BaseModel):
@@ -91,20 +92,30 @@ async def register(request:Request, user:userAuth):
     password = user.password
     name = user.name
     password_hash = generate_password_hash(password)
-
-    response = supabase.table("users").insert({
+    try:
+        response = supabase.table("users").insert({
         "email" : email,
         "password_hash" : password_hash,
         "name" : name
-    }).execute()
+        }).execute()
 
-    return {
+        return {
         "message" : "usuário cadastrado, deu certo",
         "response" : response
-    }
+        }
+    except APIError as error:
+        if error.code == "23505":
+            return JSONResponse(
+                status_code=409,
+                content={"message": "Usuário já cadastrado"}
+            )
+        return JSONResponse(
+            status_code=500,
+            content={"message" : "Erro ao cadastrar usuário"}
+        )
 
 @router.post("/login")
-@rate_limit(req_limit=5, time_skip=60)
+@rate_limit(req_limit=5, time_skip=600)
 async def login(request:Request, user: userAuth, response : Response):
     email = user.email
     password = user.password
