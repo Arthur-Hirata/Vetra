@@ -1,7 +1,7 @@
 
 function Home(){
     return(
-        <div></div>
+        <div className="h-screen w-full">s</div>
     )
 }
 export default Home
