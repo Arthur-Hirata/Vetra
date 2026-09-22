@@ -80,3 +80,7 @@ export async function Logout() {
     }
     return data
 }
+
+export async function getProfile() {
+
+}

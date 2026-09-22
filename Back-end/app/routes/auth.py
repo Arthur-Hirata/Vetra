@@ -19,7 +19,6 @@ class userAuth(BaseModel):
     name : Optional[str] = None
 
 
-
 @router.post("/userValidation")
 async def userValidation(request: Request):
     cookie = request.cookies.get("access_token")
@@ -127,3 +126,22 @@ async def login(request:Request, user: userAuth, response : Response):
         )
 
 
+@router.post("/profile")
+async def userProfile(request: Request):
+    cookies = request.cookies.get("acess_token")
+    token = cookies.removeprefix("Bearer ")
+
+    payload = jwt.decode(
+        token,
+        SECRET_KEY,
+        algorithms=['HS256']
+    )
+    email = payload['email']
+
+
+
+    db_response = supabase.table("users").select("name, address").eq("email", email).execute()
+    usuario = db_response[0]
+
+
+    return {"User" : usuario}
