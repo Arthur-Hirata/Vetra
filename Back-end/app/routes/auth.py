@@ -126,9 +126,10 @@ async def login(request:Request, user: userAuth, response : Response):
         )
 
 
-@router.post("/profile")
+@router.get("/profile")
 async def userProfile(request: Request):
-    cookies = request.cookies.get("acess_token")
+    cookies = request.cookies.get("access_token")
+
     token = cookies.removeprefix("Bearer ")
 
     payload = jwt.decode(
@@ -140,8 +141,8 @@ async def userProfile(request: Request):
 
 
 
-    db_response = supabase.table("users").select("name, address").eq("email", email).execute()
-    usuario = db_response[0]
+    db_response = supabase.table("users").select("name, address, email").eq("email", email).execute()
+    usuario = db_response.data[0]
 
 
     return {"User" : usuario}
