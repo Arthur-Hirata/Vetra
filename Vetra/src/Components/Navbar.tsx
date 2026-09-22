@@ -15,7 +15,6 @@ function Navbar(){
             setUsername(data.user["name"])
             setIsAuthenticated(true)
         }catch{
-            console.log("usuário nao autenticado")
             setUsername("")
             setIsAuthenticated(false)
         }
@@ -31,8 +30,6 @@ function Navbar(){
     function handleUserClick(){
         if (isAuthenticated){
             setMenuOpen(menuOpen ? false : true)
-            
-            console.log("loggado")
         }
         else{
             navigate("/login")
@@ -68,7 +65,7 @@ function Navbar(){
         }`}
 >
     <button
-        onClick={() => navigate("/account")}
+        onClick={() => navigate("/profile")}
         className="w-full px-4 py-2 text-center text-text transition-colors hover:bg-card-secondary"
     >
         Perfil

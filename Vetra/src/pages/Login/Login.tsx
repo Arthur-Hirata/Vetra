@@ -56,7 +56,7 @@ export default function Login(){
                     if (error.message === "Too many requests"){
                         const apiError = error as ApiError
                         navigate("/too-many-requests", {
-                            state: {
+                            state: {    
                                 wait_time: apiError.data?.wait_time
                             }
                         })
