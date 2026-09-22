@@ -1,10 +1,14 @@
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { getProfile } from "../../services/api"
 export default function Profile(){
+    const [userName, setUserName] = useState("")
+    const [userEmail, setUserEmail] = useState("")
+    const [userAddress, setUserAddress] = useState("")
     const getUserData = useCallback(async()=>{
         try{
             const data = await getProfile()
-            console.log(data)
+            setUserName(data.User['name'])
+            setUserEmail(data.User['email'])
         }
         catch (error:unknown){
             console.log(error)
@@ -19,7 +23,9 @@ export default function Profile(){
     return(
         <div className="bg-background flex items-center justify-center h-screen">
             <div className="bg-card-accent w-200 h-170 flex items-center justify-center rounded-md">
-
+                    <span>{userName}</span>
+                    <span>{userEmail}</span>
+                    <span>{userAddress}</span>
             </div>
         </div>
     )
