@@ -65,7 +65,18 @@ export async function getCurrentUser() {
     const data = await response.json() 
     
     if (!response.ok){
-        throw new Error(data.messagem || "Não autenticado")
+        throw new Error(data.message || "Não autenticado")
+    }
+    return data
+}
+export async function Logout() {
+    const response = await fetch(`${API_URL}/aut/logout`, {
+        method : 'POST',
+         credentials : "include"
+    })
+    const data = await response.json()
+    if (!response.ok){
+        throw new Error (data.message || "Erro ao fazer logout")
     }
     return data
 }

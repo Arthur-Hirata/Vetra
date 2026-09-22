@@ -46,7 +46,24 @@ async def userValidation(request: Request):
             content={"message": "Token expirado"}
         )
 
+@router.post("/logout")
+async def Logout(request:Request,response : Response):
+    cookie = request.cookies.get("access_token")
+    response.delete_cookie(
+        key="access_token",
+        httponly=True,
+        samesite="lax",
+        secure=False
+    )
+    return JSONResponse(
+        status_code=200,
+        content={"mensagem": "logout realizado"}
+    )
 
+
+
+
+    
 @router.post("/register")
 @rate_limit(req_limit=5, time_skip=300)
 async def register(request:Request, user:userAuth):

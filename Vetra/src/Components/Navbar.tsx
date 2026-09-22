@@ -2,6 +2,8 @@ import Button from "./Button"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { getCurrentUser } from "../services/api"
+import { Logout } from "../services/api"
+
 function Navbar(){
     const navigate = useNavigate()
     const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -32,6 +34,14 @@ function Navbar(){
             navigate("/login")
         }
     }
+    function handleLogout(){
+        setMenuOpen(false)
+        try{
+            const response = Logout()
+            console.log(response)
+        }
+
+    }
     return (
         <nav className="bg-cards w-full h-20 flex items-center justify-between top-0 z-50 relative">
             <div>
@@ -61,7 +71,7 @@ function Navbar(){
     <hr className="border-border" />
 
     <button
-        onClick={() => setMenuOpen(false)}
+        onClick={handleLogout}
         className="w-full px-4 py-2 text-center text-error transition-colors hover:bg-card-secondary"
     >
         Sair
