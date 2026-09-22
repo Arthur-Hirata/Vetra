@@ -47,8 +47,7 @@ export default function AccountCreate(){
         }
         if (isValid){
             try{
-                const data = await register(userEmail, userPassword, userName)
-                console.log(data)
+                await register(userEmail, userPassword, userName)
                 setToast(true)
             }catch (error:unknown){
                 if (error instanceof Error){

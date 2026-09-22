@@ -1,6 +1,6 @@
 import Button from "./Button"
 import { useNavigate } from "react-router-dom"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { getCurrentUser } from "../services/api"
 import { Logout } from "../services/api"
 
@@ -9,21 +9,25 @@ function Navbar(){
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [userName, setUsername] = useState("")
     const [menuOpen, setMenuOpen] = useState(false)
-    useEffect(()=>{
-        async function ValidateSession() {
-            try{
-                const data = await getCurrentUser()
-                setUsername(data.user["name"])
-                setIsAuthenticated(true)
-            }catch{
-                console.log("usuário nao autenticado")
-                setUsername("")
-                setIsAuthenticated(false)
-            }
-
+    const validateSession = useCallback(async () => {
+        try{
+            const data = await getCurrentUser()
+            setUsername(data.user["name"])
+            setIsAuthenticated(true)
+        }catch{
+            console.log("usuário nao autenticado")
+            setUsername("")
+            setIsAuthenticated(false)
         }
-        ValidateSession()
+
     }, [])
+    useEffect(()=>{
+        const timeoutId = window.setTimeout(() => {
+            void validateSession()
+        }, 0)
+
+        return () => window.clearTimeout(timeoutId)
+    }, [validateSession])
     function handleUserClick(){
         if (isAuthenticated){
             setMenuOpen(menuOpen ? false : true)
@@ -34,13 +38,15 @@ function Navbar(){
             navigate("/login")
         }
     }
-    function handleLogout(){
+    async function handleLogout(){
         setMenuOpen(false)
         try{
-            const response = Logout()
-            console.log(response)
-        }
+            await Logout()
+            await validateSession()
 
+        }catch(error:unknown){
+            console.log(error)
+        }
     }
     return (
         <nav className="bg-cards w-full h-20 flex items-center justify-between top-0 z-50 relative">

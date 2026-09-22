@@ -70,7 +70,7 @@ export async function getCurrentUser() {
     return data
 }
 export async function Logout() {
-    const response = await fetch(`${API_URL}/aut/logout`, {
+    const response = await fetch(`${API_URL}/auth/logout`, {
         method : 'POST',
          credentials : "include"
     })
