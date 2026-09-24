@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from "react"
 import { getProfile } from "../../services/api"
 import { deleteUser } from "../../services/api"
+import ConfimationModal from "../../Components/ConfimationModal"
 export default function Profile(){
     const [userName, setUserName] = useState("")
     const [userEmail, setUserEmail] = useState("")
     const [userAddress, setUserAddress] = useState("")
+    const [isDeleteModalOpen,setIsDeleteModalOpen] = useState(false)
     const getUserData = useCallback(async()=>{
         try{
             const data = await getProfile()
@@ -23,13 +25,24 @@ export default function Profile(){
         return () => window.clearTimeout(timeoutId)
     }, [getUserData])
 
-    async function handleDelete(){
-        try {
+    function handleDelete(){
+        setIsDeleteModalOpen(true)
+    }
+    async function  deletar() {
+        try{
             await deleteUser()
+            setIsDeleteModalOpen(false)
+            
+
         }catch(error:unknown){
             console.log(error)
         }
     }
+    function onCancel(){
+        setIsDeleteModalOpen(false)
+    }
+
+
     return(
         <div className="h-screen w-full bg-background px-4 py-8 sm:px-8 lg:px-12">
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 lg:flex-row lg:items-start">
@@ -120,6 +133,15 @@ export default function Profile(){
                     <div>
                         <button className="bg-error text-white w-60 h-20 rounded-md border border-border transtion:transform duration-300 hover:scale-105" onClick={handleDelete}>
                             <i className="fas fa-trash"></i> Excluir conta</button>
+                                {isDeleteModalOpen && <ConfimationModal 
+                                    OnConfirm={deletar}
+                                    OnCancel={onCancel}
+                                    title="Cuidado"
+                                    children="Essa ação não pode ser desfeita, tem certeza que deseja exluir sua conta"
+                                    confirmText="Deletar"
+                                    cancelText="Cancelar"
+                                
+                                />}
                         </div>
                     </div>
                 </main>

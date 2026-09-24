@@ -152,12 +152,12 @@ async def userProfile(request: Request):
 @router.delete("/exclude")
 async def excludeUser(request:Request):
     cookies = request.cookies.get("access_token")
+    token = cookies.removeprefix("Bearer ")
     if not cookies:
         return JSONResponse(
             status_code=401,
             content={"message": "Usuário não autenticado"}
         )
-    token = cookies.removeprefix("Bearer ")
     payload = jwt.decode(
         token,
         SECRET_KEY,
@@ -165,7 +165,7 @@ async def excludeUser(request:Request):
     )
     email = payload['email']
     db_response = supabase.table("users").delete().eq('email', email).execute()
-    if not db_response:
+    if not db_response.data:
         return JSONResponse(
             status_code=401,
             content={"message" : "Erro ao excluir usuário"}
