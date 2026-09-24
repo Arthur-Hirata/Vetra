@@ -9,6 +9,7 @@ function Navbar(){
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [userName, setUsername] = useState("")
     const [menuOpen, setMenuOpen] = useState(false)
+    const [avatar, setAvatarUrl] = useState("")
     const validateSession = useCallback(async () => {
         try{
             const data = await getCurrentUser()
@@ -53,7 +54,17 @@ function Navbar(){
             </div>
             <div className="flex gap-20">
                 <button className="transition:transform duration-300 hover:scale-105"><i className="fa-solid fa-cart-shopping"></i></button>
-                <Button  children={isAuthenticated ? userName : "Login"} onClick={handleUserClick} className="mr-10"/>
+                <Button onClick={handleUserClick} className="mr-10">
+                    {isAuthenticated ?(
+                        <>
+                            <img src={avatar || "/foto.jpg"} alt={`Foto de ${userName}`} className="h-6 w-6 rounded-full object-cover ml-5" />
+                            <span className="absolute -mt-6">{userName}</span>
+                        </>
+                    ): (
+                        "Login"
+                    )}
+
+                </Button>
                 <div
     className={`absolute right-4 top-16 z-50 w-42 origin-top-right rounded-md
         border border-border bg-cards py-2 shadow-card

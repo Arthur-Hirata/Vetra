@@ -9,6 +9,7 @@ export default function Profile(){
             const data = await getProfile()
             setUserName(data.User['name'])
             setUserEmail(data.User['email'])
+            setUserAddress(data.User['address'])
         }
         catch (error:unknown){
             console.log(error)
