@@ -22,7 +22,7 @@ export default function Profile(){
         return () => window.clearTimeout(timeoutId)
     }, [getUserData])
     return(
-        <div className="min-h-[calc(100vh-5rem)] w-full bg-background px-4 py-8 sm:px-8 lg:px-12">
+        <div className="h-screen w-full bg-background px-4 py-8 sm:px-8 lg:px-12">
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 lg:flex-row lg:items-start">
                 <aside className="w-full shrink-0 rounded-md border border-border bg-cards p-4 shadow-card lg:sticky lg:top-6 lg:w-64">
                     <div className="mb-6 border-b border-border px-2 pb-5">
@@ -98,8 +98,8 @@ export default function Profile(){
                             <p className="text-sm leading-6 text-text">{userAddress || "Nenhum endereço cadastrado."}</p>
                         </div>
                     </section>
-
-                    <section id="security" className="flex flex-col gap-4 rounded-md border border-border bg-card-accent p-5 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex flex-row gap-20 items-center ">
+                    <section id="security" className="w-150 flex flex-col gap-4 rounded-md border border-border bg-card-accent p-5 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                             <p className="text-sm font-semibold text-text">Segurança da conta</p>
                             <p className="mt-1 text-sm text-text-secondary">Atualize sua senha e mantenha sua conta protegida.</p>
@@ -108,6 +108,11 @@ export default function Profile(){
                             Alterar senha
                         </button>
                     </section>
+                    <div>
+                        <button className="bg-error text-white w-60 h-20 rounded-md border border-border transtion:transform duration-300 hover:scale-105">
+                            <i className="fas fa-trash"></i> Excluir conta</button>
+                        </div>
+                    </div>
                 </main>
             </div>
         </div>
