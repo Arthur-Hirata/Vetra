@@ -14,6 +14,7 @@ function Navbar(){
         try{
             const data = await getCurrentUser()
             setUsername(data.user["name"])
+            setAvatarUrl(data.user['user_avatar'])
             setIsAuthenticated(true)
         }catch{
             setUsername("")
@@ -54,11 +55,11 @@ function Navbar(){
             </div>
             <div className="flex gap-20">
                 <button className="transition:transform duration-300 hover:scale-105"><i className="fa-solid fa-cart-shopping"></i></button>
-                <Button onClick={handleUserClick} className="mr-10">
+                <Button onClick={handleUserClick} className="mr-10 flex items-center justify-center gap-2 px-2">
                     {isAuthenticated ?(
                         <>
-                            <img src={avatar || "/foto.jpg"} alt={`Foto de ${userName}`} className="h-6 w-6 rounded-full object-cover ml-5" />
-                            <span className="absolute -mt-6">{userName}</span>
+                            <img src={avatar || "/foto.jpg"} alt={`Foto de ${userName}`} className="h-6 w-6 shrink-0 rounded-full object-cover" />
+                            <span className="truncate">{userName}</span>
                         </>
                     ): (
                         "Login"
