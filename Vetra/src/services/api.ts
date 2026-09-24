@@ -92,3 +92,14 @@ export async function getProfile() {
     }
     return data
 }
+export async function deleteUser() {
+    const response = await fetch(`${API_URL}/auth/exclude`, {
+        method : 'DELETE',
+        credentials : "include"
+    })
+    const data = await response.json()
+    if (!response.ok){
+        throw new Error (data.message || "Erro ao excluir usuário")
+    }
+    return data
+}
