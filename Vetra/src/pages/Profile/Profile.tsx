@@ -136,7 +136,7 @@ export default function Profile(){
                                 {isDeleteModalOpen && <ConfimationModal 
                                     OnConfirm={deletar}
                                     OnCancel={onCancel}
-                                    title="Cuidado"
+                                    title="Cuidado!"
                                     children="Essa ação não pode ser desfeita, tem certeza que deseja exluir sua conta"
                                     confirmText="Deletar"
                                     cancelText="Cancelar"
