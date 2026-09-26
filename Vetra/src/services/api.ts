@@ -40,6 +40,7 @@ export async function register(email:string, password:string, name:string) {
         headers: {
             "Content-Type": "application/json",
         },
+        credentials : "include",
         body : JSON.stringify({
             email: email,
             password : password,

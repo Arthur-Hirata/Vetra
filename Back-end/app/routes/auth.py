@@ -66,14 +66,14 @@ async def register(request:Request, user:userAuth, response:Response):
     name = user.name
     password_hash = generate_password_hash(password)
     try:
-        response = supabase.table("users").insert({
+        db_response = supabase.table("users").insert({
         "email" : email,
         "password_hash" : password_hash,
         "name" : name
         }).select('id,avatar_url,role').execute()
-        user_id = response.data[0]['id']
-        user_avatar = response.data[0]['avatar_url']
-        user_role = response.data[0]['role']
+        user_id = db_response.data[0]['id']
+        user_avatar = db_response.data[0]['avatar_url']
+        user_role = db_response.data[0]['role']
         payload = {
             'sub' : str(user_id),
             'email' : email,
