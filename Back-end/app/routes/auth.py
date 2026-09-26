@@ -19,6 +19,10 @@ class userAuth(BaseModel):
     name : Optional[str] = None
 
 
+
+
+
+
 @router.post("/userValidation")
 async def userValidation(request: Request):
     cookie = request.cookies.get("access_token")
@@ -56,7 +60,7 @@ async def Logout(request:Request,response : Response):
     
 @router.post("/register")
 @rate_limit(req_limit=5, time_skip=300)
-async def register(request:Request, user:userAuth):
+async def register(request:Request, user:userAuth, response:Response):
     email = user.email
     password = user.password
     name = user.name
@@ -66,12 +70,28 @@ async def register(request:Request, user:userAuth):
         "email" : email,
         "password_hash" : password_hash,
         "name" : name
-        }).execute()
-
-        return {
-        "message" : "usuário cadastrado, deu certo",
-        "response" : response
+        }).select('id,avatar_url,role').execute()
+        user_id = response.data[0]['id']
+        user_avatar = response.data[0]['avatar_url']
+        user_role = response.data[0]['role']
+        payload = {
+            'sub' : str(user_id),
+            'email' : email,
+            'name': name,
+            'role': user_role,
+            'user_avatar': user_avatar,
+            'exp' :datetime.now(timezone.utc) + timedelta(hours= 96)
         }
+        jwt_Token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+        response.set_cookie(
+                key = "access_token",
+                value = f"Bearer {jwt_Token}".strip(),
+                httponly = True,
+                max_age = 345600,
+                samesite = "lax",
+                secure = False
+            )
+        return {"message": "Usuário cadastrado com sucesso"}
     except APIError as error:
         if error.code == "23505":
             return JSONResponse(
