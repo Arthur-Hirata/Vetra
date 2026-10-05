@@ -46,7 +46,7 @@ export default function ProfileHome(){
     return(
         <div>
              <section id="overview" className="border-b border-border pb-6">
-                                    <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-primary">Minha conta</p>
+                            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-primary">Minha conta</p>
                                     <h1 className="text-3xl font-semibold text-text sm:text-4xl">Olá, {userName || "seja bem-vindo"}.</h1>
                                     <p className="mt-2 max-w-2xl text-sm leading-6 text-text-secondary">Gerencie suas informações pessoais e preferências da conta.</p>
                                 </section>

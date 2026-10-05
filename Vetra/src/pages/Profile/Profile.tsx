@@ -53,15 +53,15 @@ export default function Profile(){
                         </a>
                         <a href="#personal-info" className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-card-secondary hover:text-text">
                             <i className="fa-solid fa-user w-4 text-center" />
-                            Dados pessoais
+                            Mudar informações
                         </a>
                         <a href="#address" className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-card-secondary hover:text-text">
                             <i className="fa-solid fa-location-dot w-4 text-center" />
-                            Endereço
+                            Carrinho
                         </a>
                         <a href="#security" className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-card-secondary hover:text-text">
                             <i className="fa-solid fa-lock w-4 text-center" />
-                            Segurança
+                            Minhas vendas
                         </a>
                     </nav>
                 </aside>
