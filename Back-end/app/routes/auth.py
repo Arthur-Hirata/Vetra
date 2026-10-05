@@ -172,6 +172,8 @@ async def userProfile(request: Request):
 @router.delete("/exclude")
 async def excludeUser(request:Request):
     cookies = request.cookies.get("access_token")
+    if not cookies:
+        return JSONResponse(status_code=401, content={"message": "Usuário não autenticado"})
     token = cookies.removeprefix("Bearer ")
     if not cookies:
         return JSONResponse(

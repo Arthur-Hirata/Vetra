@@ -58,7 +58,7 @@ function Navbar(){
                 <Button onClick={handleUserClick} className="mr-10 flex items-center justify-center gap-2 px-2">
                     {isAuthenticated ?(
                         <>
-                            <img src={avatar || "/foto.jpg"} alt={`Foto de ${userName}`} className="h-6 w-6 shrink-0 rounded-full object-cover" />
+                            <img src={avatar || "/foto.jpg"} alt={`Foto de ${userName}`} className="h-5 w-5 shrink-0 rounded-full object-cover" />
                             <span className="truncate">{userName}</span>
                         </>
                     ): (
