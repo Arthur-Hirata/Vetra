@@ -1,30 +1,14 @@
-import { useCallback, useEffect, useState } from "react"
-import { getProfile } from "../../../services/api"
+import { useState } from "react"
 import { deleteUser } from "../../../services/api"
 import ConfimationModal from "../../../Components/ConfimationModal"
+import type { ProfileData } from "../Profile"
 
-export default function ProfileHome(){
-    const [userName, setUserName] = useState("")
-        const [userEmail, setUserEmail] = useState("")
-        const [userAddress, setUserAddress] = useState("")
+interface ProfileHomeProps {
+    profile: ProfileData
+}
+
+export default function ProfileHome({ profile }: ProfileHomeProps){
         const [isDeleteModalOpen,setIsDeleteModalOpen] = useState(false)
-        const getUserData = useCallback(async()=>{
-            try{
-                const data = await getProfile()
-                setUserName(data.User['name'])
-                setUserEmail(data.User['email'])
-                setUserAddress(data.User['address'])
-            }
-            catch (error:unknown){
-                console.log(error)
-            }
-        }, [])
-        useEffect(()=>{
-            const timeoutId = window.setTimeout(()=>{
-                void getUserData()
-            })
-            return () => window.clearTimeout(timeoutId)
-        }, [getUserData])
     
         function handleDelete(){
             setIsDeleteModalOpen(true)
@@ -44,15 +28,15 @@ export default function ProfileHome(){
         }
     
     return(
-        <div>
+        <div >
              <section id="overview" className="border-b border-border pb-6">
-                            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-primary">Minha conta</p>
-                                    <h1 className="text-3xl font-semibold text-text sm:text-4xl">Olá, {userName || "seja bem-vindo"}.</h1>
-                                    <p className="mt-2 max-w-2xl text-sm leading-6 text-text-secondary">Gerencie suas informações pessoais e preferências da conta.</p>
-                                </section>
+                    <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-primary">Minha conta</p>
+                    <h1 className="text-3xl font-semibold text-text sm:text-4xl">Olá, {profile.name || "seja bem-vindo"}.</h1>
+                    <p className="mt-2 max-w-2xl text-sm leading-6 text-text-secondary">Gerencie suas informações pessoais e preferências da conta.</p>
+            </section>
             
-                                <section className="grid gap-4 sm:grid-cols-2">
-                                    <div className="rounded-md border border-border bg-cards p-5 shadow-card">
+             <section className="grid gap-4 sm:grid-cols-2">
+                    <div className="rounded-md border border-border bg-cards p-5 shadow-card">
                                         <div className="mb-5 flex items-center justify-between">
                                             <div>
                                                 <p className="text-sm text-text-secondary">Perfil</p>
@@ -63,11 +47,11 @@ export default function ProfileHome(){
                                         <dl id="personal-info" className="space-y-4 text-sm">
                                             <div>
                                                 <dt className="text-text-secondary">Nome</dt>
-                                                <dd className="mt-1 font-medium text-text">{userName || "Não informado"}</dd>
+                                                <dd className="mt-1 font-medium text-text">{profile.name || "Não informado"}</dd>
                                             </div>
                                             <div>
                                                 <dt className="text-text-secondary">E-mail</dt>
-                                                <dd className="mt-1 break-all font-medium text-text">{userEmail || "Não informado"}</dd>
+                                                <dd className="mt-1 break-all font-medium text-text">{profile.email || "Não informado"}</dd>
                                             </div>
                                         </dl>
                                     </div>
@@ -80,11 +64,11 @@ export default function ProfileHome(){
                                             </div>
                                             <i className="fa-solid fa-location-dot text-xl text-primary" />
                                         </div>
-                                        <p className="text-sm leading-6 text-text">{userAddress || "Nenhum endereço cadastrado."}</p>
+                                        <p className="text-sm leading-6 text-text">{profile.address || "Nenhum endereço cadastrado."}</p>
                                     </div>
                                 </section>
                                 <div className="flex flex-row gap-20 items-center ">
-                                <section id="security" className="w-150 flex flex-col gap-4 rounded-md border border-border bg-card-accent p-5 sm:flex-row sm:items-center sm:justify-between">
+                                <section id="security" className="w-150 flex flex-col gap-4 rounded-md border border-border bg-card-accent p-5 sm:flex-row sm:items-center sm:justify-between mt-6">
                                     <div>
                                         <p className="text-sm font-semibold text-text">Segurança da conta</p>
                                         <p className="mt-1 text-sm text-text-secondary">Atualize sua senha e mantenha sua conta protegida.</p>
@@ -94,7 +78,7 @@ export default function ProfileHome(){
                                     </button>
                                 </section>
                                 <div>
-                                    <button className="bg-error text-white w-60 h-20 rounded-md border border-border transtion:transform duration-300 hover:scale-105" onClick={handleDelete}>
+                                    <button className="bg-error text-white w-60 h-20 rounded-md border mt-5 border-border transtion:transform duration-300 hover:scale-105" onClick={handleDelete}>
                                         <i className="fas fa-trash"></i> Excluir conta</button>
                                             {isDeleteModalOpen && <ConfimationModal 
                                                 OnConfirm={deletar}
