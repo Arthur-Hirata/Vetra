@@ -1,7 +1,13 @@
-import { useCallback, useEffect, useState } from "react"
+import { lazy, Suspense, useCallback, useEffect, useState } from "react"
 import { getProfile } from "../../services/api"
 import { useNavigate } from "react-router-dom"
+import ProfileHome from "./ProfileComponents/ProfileHome"
+type Section = "home" | "info" | "cart" | "sells"
+const AddInfo = lazy(() => import("./ProfileComponents/AddProfileInfo"))
+const ProfileCart = lazy(() =>import("./ProfileComponents/ProfileCart"))
+const ProfleSells = lazy(() => import("./ProfileComponents/ProfileSells"))
 export default function Profile(){
+    const [section, setSection] = useState<Section>("home")
     const navigate = useNavigate()
     const [userName, setUserName] = useState("")
     const getUserData = useCallback(async()=>{
@@ -16,7 +22,7 @@ export default function Profile(){
                 }
             }
         }
-    }, [])
+    },[])
     useEffect(()=>{
         const timeoutId = window.setTimeout(()=>{
             void getUserData()
@@ -47,25 +53,43 @@ export default function Profile(){
                     </div>
 
                     <nav aria-label="Seções do perfil" className="space-y-1">
-                        <a href="#overview" className="flex items-center gap-3 rounded-md bg-card-secondary px-3 py-2.5 text-sm font-semibold text-primary">
+                        <a onClick={() => setSection("home")} className="flex items-center gap-3 rounded-md bg-card-secondary px-3 py-2.5 text-sm font-semibold text-primary">
                             <i className="fa-solid fa-chart-line w-4 text-center" />
                             Visão geral
                         </a>
-                        <a href="#personal-info" className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-card-secondary hover:text-text">
+                        <a onClick={() => setSection("info")} className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-card-secondary hover:text-text">
                             <i className="fa-solid fa-user w-4 text-center" />
                             Mudar informações
                         </a>
-                        <a href="#address" className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-card-secondary hover:text-text">
+                        <a onClick={() => setSection("cart")} className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-card-secondary hover:text-text">
                             <i className="fa-solid fa-location-dot w-4 text-center" />
                             Carrinho
                         </a>
-                        <a href="#security" className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-card-secondary hover:text-text">
+                        <a onClick={() => setSection("sells")} className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-card-secondary hover:text-text">
                             <i className="fa-solid fa-lock w-4 text-center" />
                             Minhas vendas
                         </a>
                     </nav>
                 </aside>
+                <main>
+                    {section === "home" && <ProfileHome/>}
+                    {section === "info"&& (
+                         <Suspense fallback={<p>Carregando seção...</p>}>
+                            <AddInfo />
+                        </Suspense>
+                    )}
+                    {section === "cart" && (
+                         <Suspense fallback={<p>Carregando seção...</p>}>
+                            <ProfileCart />
+                        </Suspense>
+                    )}
 
+                    {section === "sells" && (
+                        <Suspense fallback={<p>Carregando seção...</p>}>
+                            <ProfleSells />
+                        </Suspense>
+                    )}
+                </main>
     
             </div>
         </div>

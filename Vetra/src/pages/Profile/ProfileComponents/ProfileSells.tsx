@@ -1,7 +1,6 @@
-export default function AddInfo(){
+export default function ProfileSells(){
     return (
         <div>
-
             
         </div>
     )
