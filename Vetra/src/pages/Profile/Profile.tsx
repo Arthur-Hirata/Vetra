@@ -80,7 +80,7 @@ export default function Profile(){
                     {section === "home" && profile && <ProfileHome profile={profile} />}
                     {section === "info"&& (
                          <Suspense fallback={<p>Carregando seção...</p>}>
-                            <AddInfo />
+                            <AddInfo profile={profile} />
                         </Suspense>
                     )}
                     {section === "cart" && (
