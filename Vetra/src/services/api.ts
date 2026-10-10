@@ -104,3 +104,20 @@ export async function deleteUser() {
     }
     return data
 }
+export async function updateUser(name?:string, address?: string, CPF?:string, avatar_url?:string) {
+    const response = await fetch(`${API_URL}/auth/updateInfo`, {
+        method : 'PATCH',
+        credentials : "include",
+        body : JSON.stringify({
+            name:name,
+            address:address,
+            CPF:CPF,
+            avatar_url:avatar_url
+        })
+    })
+    const data = await response.json()
+    if (!response.ok){
+        throw new Error (data.message || "Erro ao excluir usuário")
+    }
+    return data
+}

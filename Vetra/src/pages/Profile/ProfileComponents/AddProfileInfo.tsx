@@ -1,11 +1,30 @@
 
 import Input from "../../../Components/Input"
 import Button from "../../../Components/Button"
-interface AddInfoProfileProps{
-    profile :ProfileData
+import { useState } from "react"
+import type { ProfileData } from "../Profile"
+
+interface AddInfoProfileProps {
+    profile: ProfileData
 }
 
-export default function AddInfo({profile} : AddInfoProfileProps){
+export default function AddInfo({ profile }: AddInfoProfileProps) {
+    const [userName, setUserName] = useState(profile.name ?? "")
+    const [address, setAddress] = useState(profile.address ?? "")
+    const [CPF, setCPF] = useState(profile.CPF ?? "")
+    const [cpfError, setCPFerror] = useState("")
+    const [avatar_url, setAvatar_url] = useState(profile.avatar_url ?? "")
+    const regexCPF = /^(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})$/
+
+
+    function updateUser() {
+        if (!regexCPF.test(CPF)){
+            setCPFerror("Insira um CPF válido")
+            return
+        }
+        setCPFerror("")
+    }
+
     return (
         <div className="flex flex-col gap-3">
             <section id="overview" className="border-b border-border pb-6">
@@ -17,11 +36,11 @@ export default function AddInfo({profile} : AddInfoProfileProps){
                 <div className="flex flex-col items-center justify-center w-full">
 
                 <img src="/foto.jpg"  className="h-35 w-35 rounded-full object-cover items-center flex justify-center" />
-                <Input value={profile.name} subTittle="Nome" type="text" classname="w-100"/>
-                <Input value={profile.address} subTittle="Endereço" type="text" classname="w-100" placeholder={profile.address ? "" : "Informe seu endereço"} />
-                <Input value={profile.CPF} subTittle="CPF" type="text"  classname="w-100" placeholder={profile.CPF ? "" : "Informe seu CPF"}/>
-                <Input value={profile.avatar_url}  type="text" subTittle="Foto de perfil" classname="w-100" placeholder={profile.avatar_url ? "" : "Adicione uma foto de perfil"} />
-                <Button children="Continuar" className="mt-5"/>
+                <Input value={userName} subTittle="Nome" type="text" classname="w-100" onChange={(e) => setUserName(e.target.value)}/>
+                <Input value={address} subTittle="Endereço" type="text" classname="w-100" placeholder={profile.address ? "" : "Informe seu endereço"} onChange={(e) => setAddress(e.target.value)}/>
+                <Input value={CPF} subTittle="CPF" type="text"  classname={cpfError ? "border-red-600 w-100" : "w-100"} placeholder={profile.CPF ? "" : "Informe seu CPF"} onChange={(e) => setCPF(e.target.value)} spanError={cpfError}/>
+                <Input value={avatar_url}  type="text" subTittle="Foto de perfil" classname="w-100" placeholder={profile.avatar_url ? "" : "Adicione uma foto de perfil"} onChange={(e) => setAvatar_url(e.target.value)} />
+                <Button children="Continuar" className="mt-5" onClick={updateUser}/>
                 </div>
             </div>
         </div>
