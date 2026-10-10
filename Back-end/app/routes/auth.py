@@ -176,7 +176,7 @@ async def userProfile(request: Request):
 @router.patch("/updateInfo")
 async def UpdateInfo(request: Request, user:userInfoAdd):
     cookies = request.cookies.get("access_token")
-    token = cookies.removeprefix("Bearer ")
+    token = cookies.removeprefix("Bearer ")    
     payload = jwt.decode(
             token,
             SECRET_KEY,
@@ -190,6 +190,7 @@ async def UpdateInfo(request: Request, user:userInfoAdd):
         supabase.table("users")
         .update(updates)
         .eq("email", email)
+        .select("name, address, email, CPF, avatar_url")
         .execute()
     )
     return {"User": response.data[0] if response.data else None}

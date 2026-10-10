@@ -104,10 +104,13 @@ export async function deleteUser() {
     }
     return data
 }
-export async function updateUser(name?:string, address?: string, CPF?:string, avatar_url?:string) {
+export async function updateUser(name:string, address: string, CPF:string, avatar_url:string) {
     const response = await fetch(`${API_URL}/auth/updateInfo`, {
         method : 'PATCH',
         credentials : "include",
+        headers: {
+            "Content-Type": "application/json",
+        },
         body : JSON.stringify({
             name:name,
             address:address,

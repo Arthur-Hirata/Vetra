@@ -1,4 +1,4 @@
-
+import { updateUser } from "../../../services/api"
 import Input from "../../../Components/Input"
 import Button from "../../../Components/Button"
 import { useState } from "react"
@@ -17,12 +17,23 @@ export default function AddInfo({ profile }: AddInfoProfileProps) {
     const regexCPF = /^(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})$/
 
 
-    function updateUser() {
-        if (!regexCPF.test(CPF)){
-            setCPFerror("Insira um CPF válido")
-            return
+    async function updateUserinfo() {
+        if (CPF){
+            if (!regexCPF.test(CPF)){
+                setCPFerror("Insira um CPF válido")
+                return
+            }
+            setCPFerror("")
         }
-        setCPFerror("")
+        try{
+            await updateUser(userName, address, CPF, avatar_url)
+
+        }
+        catch(error:unknown){
+            if (error instanceof Error){
+                console.log(error.message)
+            }
+        }
     }
 
     return (
@@ -40,7 +51,7 @@ export default function AddInfo({ profile }: AddInfoProfileProps) {
                 <Input value={address} subTittle="Endereço" type="text" classname="w-100" placeholder={profile.address ? "" : "Informe seu endereço"} onChange={(e) => setAddress(e.target.value)}/>
                 <Input value={CPF} subTittle="CPF" type="text"  classname={cpfError ? "border-red-600 w-100" : "w-100"} placeholder={profile.CPF ? "" : "Informe seu CPF"} onChange={(e) => setCPF(e.target.value)} spanError={cpfError}/>
                 <Input value={avatar_url}  type="text" subTittle="Foto de perfil" classname="w-100" placeholder={profile.avatar_url ? "" : "Adicione uma foto de perfil"} onChange={(e) => setAvatar_url(e.target.value)} />
-                <Button children="Continuar" className="mt-5" onClick={updateUser}/>
+                <Button children="Continuar" className="mt-5" onClick={updateUserinfo}/>
                 </div>
             </div>
         </div>
