@@ -19,7 +19,11 @@ class userAuth(BaseModel):
     name : Optional[str] = None
 
 
-
+class userInfoAdd(BaseModel):
+    name :Optional[str] = None
+    CPF : Optional[str] = None
+    avatar_url : Optional[str] = None
+    address :Optional[str] = None
 
 
 
@@ -163,11 +167,38 @@ async def userProfile(request: Request):
 
 
 
-    db_response = supabase.table("users").select("name, address, email").eq("email", email).execute()
+    db_response = supabase.table("users").select("name, address, email, CPF, avatar_url").eq("email", email).execute()
     usuario = db_response.data[0]
 
 
     return {"User" : usuario}
+
+@router.patch("/updateInfo")
+async def UpdateInfo(request: Request, user:userInfoAdd):
+    cookies = request.cookies.get("access_token")
+    token = cookies.removeprefix("Bearer ")
+    payload = jwt.decode(
+            token,
+            SECRET_KEY,
+            algorithms=['HS256']
+        )
+    email = payload['email']
+    updates = user.model_dump(exclude_unset = True)
+    if not updates:
+        return JSONResponse(status_code=400, content={"message": "Nenhuma informação enviada"})
+    response = (
+        supabase.table("users")
+        .update(updates)
+        .eq("email", email)
+        .execute()
+    )
+    return {"User": response.data[0] if response.data else None}
+
+    
+
+
+
+
 
 @router.delete("/exclude")
 async def excludeUser(request:Request):

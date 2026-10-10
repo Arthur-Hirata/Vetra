@@ -10,6 +10,8 @@ export interface ProfileData {
     name:string
     email:string
     address : string
+    CPF:string
+    avatar_url :string
 }
 
 
@@ -25,6 +27,8 @@ export default function Profile(){
                     name: data.User.name,
                     email: data.User.email,
                     address: data.User.address,
+                    CPF : data.User.CPF,
+                    avatar_url : data.User.avatar_url
                 })
             } catch (error: unknown) {
                 if (error instanceof Error && error.message === "Usuário não autenticado") {

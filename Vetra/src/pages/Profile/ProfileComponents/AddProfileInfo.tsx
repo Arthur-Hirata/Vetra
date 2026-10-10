@@ -18,9 +18,9 @@ export default function AddInfo({profile} : AddInfoProfileProps){
 
                 <img src="/foto.jpg"  className="h-35 w-35 rounded-full object-cover items-center flex justify-center" />
                 <Input value={profile.name} subTittle="Nome" type="text" classname="w-100"/>
-                <Input value={profile.address} subTittle="Endereço" type="text" classname="w-100" />
-                <Input value={profile.email} subTittle="CPF" type="text"  classname="w-100"/>
-                <Input type="text" subTittle="Foto de perfil" classname="w-100"/>
+                <Input value={profile.address} subTittle="Endereço" type="text" classname="w-100" placeholder={profile.address ? "" : "Informe seu endereço"} />
+                <Input value={profile.CPF} subTittle="CPF" type="text"  classname="w-100" placeholder={profile.CPF ? "" : "Informe seu CPF"}/>
+                <Input value={profile.avatar_url}  type="text" subTittle="Foto de perfil" classname="w-100" placeholder={profile.avatar_url ? "" : "Adicione uma foto de perfil"} />
                 <Button children="Continuar" className="mt-5"/>
                 </div>
             </div>
