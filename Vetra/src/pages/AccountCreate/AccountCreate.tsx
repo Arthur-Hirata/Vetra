@@ -74,10 +74,10 @@ export default function AccountCreate(){
                     <span className="">Criar</span>
                 </span>
                 <div className="flex flex-col mt-3 gap-4">
-                    <Input placeholder="Digite seu Nome" subTittle="Nome" type="text"  onChange={(e)=> setUserName(e.target.value)} classname={nameError ? "border-red-600" :""} spanError={nameError}/>
-                    <Input placeholder="Digite seu e-mail" subTittle="E-mail" type="text" onChange={(e) => setUserEmail(e.target.value)}  classname={emailError ? "border-red-600" : ""} spanError={emailError}/>
-                    <Input placeholder="Digite sua senha" subTittle="Senha" type="password" onChange={(e) => setUserPassword(e.target.value)} classname={passwordError ? "border-red-600" : ""} spanError={passwordError}/>
-                    <Input placeholder="Confirme sua senha" subTittle="Confirme sua senha" type="password" onChange={(e) => setConfirmPassword(e.target.value)} classname={confirmPasswordError ? "border-red-600" : ""} spanError={confirmPasswordError} />
+                    <Input placeholder="Digite seu Nome" subTittle="Nome" type="text"  onChange={(e)=> setUserName(e.target.value)} classname={nameError ? "border-red-600 w-100" :" w-100"} spanError={nameError}/>
+                    <Input placeholder="Digite seu e-mail" subTittle="E-mail" type="text" onChange={(e) => setUserEmail(e.target.value)}  classname={emailError ? "border-red-600 w-100" : " w-100"} spanError={emailError}/>
+                    <Input placeholder="Digite sua senha" subTittle="Senha" type="password" onChange={(e) => setUserPassword(e.target.value)} classname={passwordError ? "border-red-600 w-100" : " w-100"} spanError={passwordError}/>
+                    <Input placeholder="Confirme sua senha" subTittle="Confirme sua senha" type="password" onChange={(e) => setConfirmPassword(e.target.value)} classname={confirmPasswordError ? "border-red-600 w-100" : " w-100"} spanError={confirmPasswordError} />
                 </div>
                 <Button children="Criar" onClick={createAcc} className="mt-15 w-50 h-10" />
                 {toast && <Toast title="Sucesso" content="Sua conta foi criada com sucesso" buttonText="Continuar" onButtonClick={()=> navigate("/")}/>}

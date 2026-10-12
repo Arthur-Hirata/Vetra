@@ -88,9 +88,9 @@ function Navbar(){
                     </Button>
                 </div>
                 <div
-    className={`absolute right-4 top-16 z-50 w-42 origin-top-right rounded-md
-        border border-border bg-cards py-2 shadow-card
-        transition-all duration-200 ease-out
+            className={`absolute right-5 top-16 z-50 w-42 origin-top-right rounded-md
+             border border-border bg-cards py-2 shadow-card
+            transition-all duration-200 ease-out
         ${
             menuOpen
                 ? "translate-y-0 scale-100 opacity-100"

@@ -50,7 +50,7 @@ export default function Profile(){
                     <div className="mb-6 border-b border-border px-2 pb-5">
                         <div className="flex items-center gap-3">
                             <img
-                                src="/foto.jpg"
+                                src={!profile?.avatar_url ? "foto.jpg" : profile.avatar_url}
                                 alt={`Foto de ${profile?.name || "usuário"}`}
                                 className="h-12 w-12 rounded-full object-cover"
                             />

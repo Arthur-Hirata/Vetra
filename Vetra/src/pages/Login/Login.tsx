@@ -75,8 +75,8 @@ export default function Login(){
                 </span>
                 <div className="flex flex-col mt-10 gap-3 items-start justify-start w-full px-10">
                     <div className="flex flex-col gap-4">
-                        <Input placeholder="Digite seu e-mail" subTittle="E-mail" type="text" onChange={(e)=> setUserEmail(e.target.value)} classname={emailError ? "border-red-600" : ""} spanError={emailError} value={userEmail}/>
-                        <Input placeholder="Digite sua senha" type="password" subTittle="Senha" onChange={(e) => setUserPassword(e.target.value) } classname={passwordError ? "border-red-600" : ""} spanError={passwordError} value={userPassword}/>
+                        <Input placeholder="Digite seu e-mail" subTittle="E-mail" type="text" onChange={(e)=> setUserEmail(e.target.value)} classname={emailError ? "border-red-600 w-100" : "w-100"} spanError={emailError} value={userEmail}/>
+                        <Input placeholder="Digite sua senha" type="password" subTittle="Senha" onChange={(e) => setUserPassword(e.target.value) } classname={passwordError ? "border-red-600 w-100" : " w-100"} spanError={passwordError} value={userPassword}/>
                     </div>
                     <span className="text-blue-500 flex text-sm hover:cursor-pointer" onClick={()=> navigate('/create')}>Não tem uma conta? Crie agora.</span>
                     <label className="relative flex cursor-pointer items-center gap-3 text-text">
