@@ -53,6 +53,14 @@ function Navbar(){
                 <i className="fa-solid fa-store-alt text-5xl"></i>
                 <a href=""><span className="ml-4 text-5xl">Vetra</span></a>
             </div>
+            <div>
+                <span>Início</span>
+                <span>Início</span>
+                <span>Início</span>
+                <span>Início</span>
+
+
+            </div>
             <div className="flex gap-20">
                 <button className="transition:transform duration-300 hover:scale-105"><i className="fa-solid fa-cart-shopping"></i></button>
                 <Button onClick={handleUserClick} className="mr-10 flex items-center justify-center gap-2 px-2">

@@ -6,7 +6,6 @@ interface ProductProps{
     seller_picture_url:string
 }
 
-
 export default function ProductCard({title, picture_url, price, seller, seller_picture_url}: ProductProps){
     return(
         <div className="bg-cards w-50 h-60 rounded-md border border-border shadow-card flex flex-col items-center transform:transition duration-300 hover:scale-105">
