@@ -3,7 +3,7 @@ import { useState, type ChangeEvent } from "react"
 interface InputProps{
     placeholder?: string
     type: string
-    subTittle: string
+    subTittle?: string
     classname?: string
     spanError?:string
     value?:string

@@ -1,4 +1,6 @@
 import Button from "./Button"
+import HoverSpan from "./HoverSpan"
+import Input from "./Input"
 import { useNavigate } from "react-router-dom"
 import { useCallback, useEffect, useState } from "react"
 import { getCurrentUser } from "../services/api"
@@ -48,22 +50,32 @@ function Navbar(){
         }
     }
     return (
-        <nav className="bg-cards w-full h-20 flex items-center justify-between top-0 z-50 relative">
-            <div>
-                <i className="fa-solid fa-store-alt text-5xl"></i>
-                <a href=""><span className="ml-4 text-5xl">Vetra</span></a>
-            </div>
-            <div>
-                <span>Início</span>
-                <span>Início</span>
-                <span>Início</span>
-                <span>Início</span>
+        <nav className="relative z-50 flex h-20 w-full items-center border-b border-border bg-cards px-4 sm:px-6">
+            <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4">
+                <a href="/" className="flex shrink-0 items-center gap-2 text-green" aria-label="Vetra - Início">
+                    <i className="fa-solid fa-store-alt text-2xl sm:text-3xl" aria-hidden="true" />
+                    <span className="text-2xl font-semibold sm:text-3xl">Vetra</span>
+                </a>
 
+                <div className="hidden items-center gap-6 lg:flex">
+                    <HoverSpan message="Início" />
+                    <HoverSpan message="Produtos" />
+                    <HoverSpan message="Categorias" />
+                    <HoverSpan message="Vender" />
+                </div>
 
-            </div>
-            <div className="flex gap-20">
-                <button className="transition:transform duration-300 hover:scale-105"><i className="fa-solid fa-cart-shopping"></i></button>
-                <Button onClick={handleUserClick} className="mr-10 flex items-center justify-center gap-2 px-2">
+                <div className="flex shrink-0 items-center gap-3 sm:gap-4">
+                    <div className="relative hidden sm:block sm:w-44 md:w-56 lg:w-64">
+                        <i className="fas fa-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-text-secondary" aria-hidden="true" />
+                        <Input placeholder="Procure pelo produto que deseja" type="text" classname="w-full pl-9 placeholder:text-xs" />
+                    </div>
+                    <button aria-label="Favoritos" className="text-error transition-transform duration-300 hover:scale-105">
+                        <i className="fa-solid fa-heart" aria-hidden="true" />
+                    </button>
+                    <button aria-label="Carrinho" className="transition-transform duration-300 hover:scale-105">
+                        <i className="fa-solid fa-cart-shopping" aria-hidden="true" />
+                    </button>
+                    <Button onClick={handleUserClick} className="flex items-center justify-center gap-2 px-2">
                     {isAuthenticated ?(
                         <>
                             <img src={avatar || "/foto.jpg"} alt={`Foto de ${userName}`} className="h-5 w-5 shrink-0 rounded-full object-cover" />
@@ -73,7 +85,8 @@ function Navbar(){
                         "Login"
                     )}
 
-                </Button>
+                    </Button>
+                </div>
                 <div
     className={`absolute right-4 top-16 z-50 w-42 origin-top-right rounded-md
         border border-border bg-cards py-2 shadow-card
