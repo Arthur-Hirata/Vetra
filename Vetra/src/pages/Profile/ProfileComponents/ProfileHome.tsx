@@ -90,7 +90,7 @@ export default function ProfileHome({ profile }: ProfileHomeProps){
                                             
                                             />}
                                     </div>
-                                </div>
+            </div>
         </div>
     )
 

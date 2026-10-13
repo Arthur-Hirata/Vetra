@@ -59,7 +59,8 @@ async def Logout(request:Request,response : Response):
     return {"message" : "Logout Realizado"}
 
 
-
+async def aumentarToken(email):
+    db_response = supabase.table("users").update("token_version", +1).execute()
 
     
 @router.post("/register")
@@ -84,6 +85,7 @@ async def register(request:Request, user:userAuth, response:Response):
             'name': name,
             'role': user_role,
             'user_avatar': user_avatar,
+            'token_version' : 0,
             'exp' :datetime.now(timezone.utc) + timedelta(hours= 96)
         }
         jwt_Token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
@@ -114,7 +116,6 @@ async def login(request:Request, user: userAuth, response : Response):
     password = user.password
 
     db_response = supabase.table("users").select("password_hash, id, role, name, avatar_url").eq("email", email).execute()
-
     if not db_response.data:
         return JSONResponse(
             status_code=404,
@@ -125,6 +126,7 @@ async def login(request:Request, user: userAuth, response : Response):
     user_role = usuario['role']
     user_name = usuario['name']
     user_avatar = usuario['avatar_url']
+    user_token_version = usuario['token_version'] =+1
     if check_password_hash(password_hash, password):
         max_idade_cookie = 345600 if user.remember else 7200
         payload ={
@@ -133,6 +135,7 @@ async def login(request:Request, user: userAuth, response : Response):
             'name' : user_name,
             'role' : user_role,
             'user_avatar' : user_avatar,
+            'token_version' : user_token_version,
             'exp' :datetime.now(timezone.utc) + timedelta(hours= 96 if user.remember else 2 )
         }
         jwt_Token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
