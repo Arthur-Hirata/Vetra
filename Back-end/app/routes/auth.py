@@ -15,7 +15,7 @@ router = APIRouter()
 class userAuth(BaseModel):
     email:str
     password : str
-    remember : Optional[bool] = None
+    remember : Optional[bool] = False
     name : Optional[str] = None
 
 
@@ -25,7 +25,10 @@ class userInfoAdd(BaseModel):
     avatar_url : Optional[str] = None
     address :Optional[str] = None
 
-
+TOKEN_TTL = {
+    False: timedelta(hours=2),
+    True: timedelta(hours=96),
+}
 
 @router.post("/userValidation")
 async def userValidation(request: Request):
@@ -59,10 +62,39 @@ async def Logout(request:Request,response : Response):
     return {"message" : "Logout Realizado"}
 
 
-async def aumentarToken(email):
-    db_response = supabase.table("users").update("token_version", +1).execute()
+def aumentarToken(email: str) -> int:
+    result = (
+        supabase.table("users")
+        .select("token_version")
+        .eq("email", email)
+        .execute()
+    )
+    if not result.data:
+        raise ValueError("Usuário não encontrado")
+    current_token = result.data[0]["token_version"] or 0
+    new_token = current_token + 1
+    supabase.table("users").update(
+        {"token_version": new_token}
+    ).eq("email", email).execute()
+    return new_token
 
-    
+
+def generateNewToken(user: dict, token_version: int, remember: bool) -> str:
+    payload = {
+        "sub": str(user["id"]),
+        "email": user["email"],
+        "name": user["name"],
+        "role": user["role"],
+        "user_avatar": user["avatar_url"],
+        "token_version": token_version,
+        "remember": remember,
+        "exp": datetime.now(timezone.utc) + TOKEN_TTL[remember],
+    }
+    return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+
+
+
+
 @router.post("/register")
 @rate_limit(req_limit=5, time_skip=300)
 async def register(request:Request, user:userAuth, response:Response):
@@ -115,46 +147,33 @@ async def login(request:Request, user: userAuth, response : Response):
     email = user.email
     password = user.password
 
-    db_response = supabase.table("users").select("password_hash, id, role, name, avatar_url").eq("email", email).execute()
+    db_response = supabase.table("users").select("password_hash, id, email, role, name, avatar_url").eq("email", email).execute()
     if not db_response.data:
         return JSONResponse(
             status_code=404,
             content={"message" : "Usuário não encontrado"})
     usuario = db_response.data[0]
     password_hash = usuario["password_hash"]
-    user_id = usuario['id']
-    user_role = usuario['role']
-    user_name = usuario['name']
-    user_avatar = usuario['avatar_url']
-    user_token_version = usuario['token_version'] =+1
-    if check_password_hash(password_hash, password):
-        max_idade_cookie = 345600 if user.remember else 7200
-        payload ={
-            'sub' : str(user_id),
-            'email' : email,
-            'name' : user_name,
-            'role' : user_role,
-            'user_avatar' : user_avatar,
-            'token_version' : user_token_version,
-            'exp' :datetime.now(timezone.utc) + timedelta(hours= 96 if user.remember else 2 )
-        }
-        jwt_Token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
-        response.set_cookie(
-            key = "access_token",
-            value = f"Bearer {jwt_Token}".strip(),
-            httponly = True,
-            max_age = max_idade_cookie,
-            samesite = "lax",
-            secure = False
-        )
-        return {"message" : "Usuário loggado com sucesso"}
-    else:
+    
+    if not check_password_hash(password_hash, password):
         return JSONResponse(
             status_code=401,
             content={"message" : "Senha incorreta"}
         )
 
-
+    remember = user.remember is True
+    token_version = aumentarToken(email)
+    token = generateNewToken(usuario, token_version, remember)
+    max_idade_cookie = int(TOKEN_TTL[remember].total_seconds())
+    response.set_cookie(
+        key="access_token",
+        value=token,
+        httponly=True,
+        max_age=max_idade_cookie,
+        samesite="lax",
+        secure=False,
+    )
+    return {"message" : "Usuário loggado com sucesso"}
 @router.get("/profile")
 async def userProfile(request: Request):
     cookies = request.cookies.get("access_token")
@@ -196,6 +215,9 @@ async def UpdateInfo(request: Request, user:userInfoAdd):
         .select("name, address, email, CPF, avatar_url")
         .execute()
     )
+    user_token_version = aumentarToken(email=email)
+
+
     return {"User": response.data[0] if response.data else None}
 
     
