@@ -29,7 +29,47 @@ TOKEN_TTL = {
     False: timedelta(hours=2),
     True: timedelta(hours=96),
 }
+def aumentarToken(email: str) -> int:
+    result = (
+        supabase.table("users")
+        .select("token_version")
+        .eq("email", email)
+        .execute()
+    )
+    if not result.data:
+        raise ValueError("Usuário não encontrado")
+    current_token = result.data[0]["token_version"] or 0
+    new_token = current_token + 1
+    supabase.table("users").update(
+        {"token_version": new_token}
+    ).eq("email", email).execute()
+    return new_token
 
+
+def generateNewToken(user: dict, token_version: int, remember: bool) -> str:
+    payload = {
+        "sub": str(user["id"]),
+        "email": user["email"],
+        "name": user["name"],
+        "role": user["role"],
+        "user_avatar": user["avatar_url"],
+        "token_version": token_version,
+        "remember": remember,
+        "exp": datetime.now(timezone.utc) + TOKEN_TTL[remember],
+    }
+    return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+
+def validateSession( email :str ,request_token) -> bool:
+    db_response = supabase.table("users").select("token_version").eq("email", email).execute()
+    token_version = db_response[0]['token_version']
+    if request_token == token_version:
+        return True
+    else:
+        return False
+
+
+
+    
 @router.post("/userValidation")
 async def userValidation(request: Request):
     cookie = request.cookies.get("access_token")
@@ -62,35 +102,6 @@ async def Logout(request:Request,response : Response):
     return {"message" : "Logout Realizado"}
 
 
-def aumentarToken(email: str) -> int:
-    result = (
-        supabase.table("users")
-        .select("token_version")
-        .eq("email", email)
-        .execute()
-    )
-    if not result.data:
-        raise ValueError("Usuário não encontrado")
-    current_token = result.data[0]["token_version"] or 0
-    new_token = current_token + 1
-    supabase.table("users").update(
-        {"token_version": new_token}
-    ).eq("email", email).execute()
-    return new_token
-
-
-def generateNewToken(user: dict, token_version: int, remember: bool) -> str:
-    payload = {
-        "sub": str(user["id"]),
-        "email": user["email"],
-        "name": user["name"],
-        "role": user["role"],
-        "user_avatar": user["avatar_url"],
-        "token_version": token_version,
-        "remember": remember,
-        "exp": datetime.now(timezone.utc) + TOKEN_TTL[remember],
-    }
-    return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
 
 
@@ -205,22 +216,24 @@ async def UpdateInfo(request: Request, user:userInfoAdd):
             algorithms=['HS256']
         )
     email = payload['email']
-    updates = user.model_dump(exclude_unset = True)
-    if not updates:
-        return JSONResponse(status_code=400, content={"message": "Nenhuma informação enviada"})
-    response = (
-        supabase.table("users")
-        .update(updates)
-        .eq("email", email)
-        .select("name, address, email, CPF, avatar_url")
-        .execute()
-    )
-    user_token_version = aumentarToken(email=email)
+    token_version = payload['token_version']
+    validate = validateSession(email, token_version)
 
-
-    return {"User": response.data[0] if response.data else None}
-
-    
+    if validate:
+        updates = user.model_dump(exclude_unset = True)
+        if not updates:
+            return JSONResponse(status_code=400, content={"message": "Nenhuma informação enviada"})
+        response = (
+            supabase.table("users")
+            .update(updates)
+            .eq("email", email)
+            .select("name, address, email, CPF, avatar_url, token_version")
+            .execute()
+        )
+        user_token_version = aumentarToken(email=email)
+        return {"User": response.data[0] if response.data else None}
+    else :
+        return {"message" : "Token inutilizado"}
 
 
 
