@@ -72,10 +72,10 @@ def validateSession( email :str ,request_token) -> bool:
 def validateToken(token:str) -> Optional[dict]:
     try:
         return jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+    except jwt.DecodeError:
+        return None
     except jwt.InvalidTokenError:
         return None
-    except jwt.ExpiredSignatureError:
-            return None
 
     
 @router.post("/userValidation")
@@ -94,14 +94,24 @@ async def userValidation(request: Request):
             SECRET_KEY,
             algorithms=["HS256"]
         )
+        if not validateSession(payload['email'], payload['token_version']):
+            error_response = JSONResponse(status_code=401, content={"message" : "Sessão expirada"})
+            error_response.delete_cookie("access_token", path="/")
+            return error_response
+
         return {
             "authenticated" : True,
             "user" : payload
         }
-    except jwt.ExpiredSignatureError:
+    except jwt.InvalidTokenError:
         return JSONResponse(
             status_code=401,
             content={"message": "Token expirado"}
+        )
+    except jwt.DecodeError:
+        return JSONResponse(
+            status_code=401,
+            content={"message": "Token inválido"}
         )
 
 @router.post("/logout")
@@ -262,17 +272,16 @@ async def excludeUser(request:Request):
     cookies = request.cookies.get("access_token")
     if not cookies:
         return JSONResponse(status_code=401, content={"message": "Usuário não autenticado"})
-    token = cookies.removeprefix("Bearer ")
-    if not cookies:
-        return JSONResponse(
-            status_code=401,
-            content={"message": "Usuário não autenticado"}
-        )
-    payload = jwt.decode(
-        token,
-        SECRET_KEY,
-        algorithms=['HS256']
-    )
+    
+    payload = validateToken(cookies.removeprefix("Bearer "))
+    if payload is None:
+        error_response = JSONResponse(status_code=401, content={"message" : "Token não autenticado"})
+        error_response.delete_cookie("access_token", path="/")
+        return error_response
+    if not validateSession(payload['email'], payload['token_version']):
+        error_response = JSONResponse(status_code=401, content={"message" : "Token incorreto"})
+        error_response.delete_cookie("access_token", path="/")
+        return error_response
     email = payload['email']
     db_response = supabase.table("users").delete().eq('email', email).execute()
     if not db_response.data:
@@ -285,4 +294,4 @@ async def excludeUser(request:Request):
         content={"message" : "Usuário exluido com sucesso!"}
     )
     response.delete_cookie("access_token")
-    return {"message" : "Usuário excluido com sucesso"}
+    return response
