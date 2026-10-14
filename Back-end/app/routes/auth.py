@@ -61,13 +61,19 @@ def generateNewToken(user: dict, token_version: int, remember: bool) -> str:
 
 def validateSession( email :str ,request_token) -> bool:
     db_response = supabase.table("users").select("token_version").eq("email", email).execute()
-    token_version = db_response[0]['token_version']
+    if not db_response.data:
+        return False
+    token_version = db_response.data[0]['token_version']
     if request_token == token_version:
         return True
     else:
         return False
-
-
+    
+def validateToken(token:str) -> Optional[dict]:
+    try:
+        return jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+    except jwt.ExpiredSignatureError:
+            return None
 
     
 @router.post("/userValidation")
@@ -207,35 +213,45 @@ async def userProfile(request: Request):
     return {"User" : usuario}
 
 @router.patch("/updateInfo")
-async def UpdateInfo(request: Request, user:userInfoAdd):
-    cookies = request.cookies.get("access_token")
-    token = cookies.removeprefix("Bearer ")    
-    payload = jwt.decode(
-            token,
-            SECRET_KEY,
-            algorithms=['HS256']
-        )
+async def UpdateInfo(request: Request, user:userInfoAdd, response:Response):
+    cookies = request.cookies.get("access_token") 
+    if not cookies:
+        return JSONResponse(status_code=401, content={"message" : "Token ausente"})
+    payload = validateToken(cookies.removeprefix("Bearer "))
+    if payload is None:
+        return JSONResponse(status_code=401, content={"message" : "Token não autenticado"})
+
+    if not validateSession(payload['email'], payload['token_version']):
+        return JSONResponse(status_code=401, content={"message" : "Token incorreto"})
     email = payload['email']
-    token_version = payload['token_version']
-    validate = validateSession(email, token_version)
-
-    if validate:
-        updates = user.model_dump(exclude_unset = True)
-        if not updates:
-            return JSONResponse(status_code=400, content={"message": "Nenhuma informação enviada"})
-        response = (
-            supabase.table("users")
-            .update(updates)
-            .eq("email", email)
-            .select("name, address, email, CPF, avatar_url, token_version")
-            .execute()
-        )
-        user_token_version = aumentarToken(email=email)
-        return {"User": response.data[0] if response.data else None}
-    else :
-        return {"message" : "Token inutilizado"}
-
-
+    updates = user.model_dump(exclude_unset = True)
+    if not updates:
+        return JSONResponse(status_code=400, content={"message": "Nenhuma informação enviada"})
+    patchUser= (
+        supabase.table("users")
+        .update(updates)
+        .eq("email", email)
+        .select("name, address, email, CPF, avatar_url, token_version")
+        .execute()
+    )
+    user_result = (
+        supabase.table("users")
+        .select("id, email, name, role, avatar_url")
+        .eq("email", email)
+        .execute()
+    )
+    remember = payload['remember']
+    user_token_version = aumentarToken(email=email)
+    newToken =generateNewToken(user_result.data[0], user_token_version, remember)
+    response.set_cookie(
+                    key = "access_token",
+                    value = f"Bearer {newToken}".strip(),
+                    httponly = True,
+                    max_age = 345600,
+                    samesite = "lax",
+                    secure = False
+                )
+    return {"User": patchUser.data[0]}
 
 
 
