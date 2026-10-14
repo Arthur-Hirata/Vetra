@@ -72,6 +72,8 @@ def validateSession( email :str ,request_token) -> bool:
 def validateToken(token:str) -> Optional[dict]:
     try:
         return jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+    except jwt.InvalidTokenError:
+        return None
     except jwt.ExpiredSignatureError:
             return None
 
@@ -219,10 +221,14 @@ async def UpdateInfo(request: Request, user:userInfoAdd, response:Response):
         return JSONResponse(status_code=401, content={"message" : "Token ausente"})
     payload = validateToken(cookies.removeprefix("Bearer "))
     if payload is None:
-        return JSONResponse(status_code=401, content={"message" : "Token não autenticado"})
+        error_response = JSONResponse(status_code=401, content={"message" : "Token não autenticado"})
+        error_response.delete_cookie("access_token", path="/")
+        return error_response
 
     if not validateSession(payload['email'], payload['token_version']):
-        return JSONResponse(status_code=401, content={"message" : "Token incorreto"})
+        error_response = JSONResponse(status_code=401, content={"message" : "Token incorreto"})
+        error_response.delete_cookie("access_token", path="/")
+        return error_response
     email = payload['email']
     updates = user.model_dump(exclude_unset = True)
     if not updates:
