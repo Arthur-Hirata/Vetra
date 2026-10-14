@@ -109,11 +109,6 @@ async def Logout(request:Request,response : Response):
     response.delete_cookie("access_token")
     return {"message" : "Logout Realizado"}
 
-
-
-
-
-
 @router.post("/register")
 @rate_limit(req_limit=5, time_skip=300)
 async def register(request:Request, user:userAuth, response:Response):
@@ -196,21 +191,23 @@ async def login(request:Request, user: userAuth, response : Response):
 @router.get("/profile")
 async def userProfile(request: Request):
     cookies = request.cookies.get("access_token")
+    if not cookies:
+        return JSONResponse(status_code=401, content={"message" : "Token ausente"})
+    payload = validateToken(cookies.removeprefix("Bearer "))
+    if payload is None:
+        error_response = JSONResponse(status_code=401, content={"message" : "Token não autenticado"})
+        error_response.delete_cookie("access_token", path="/")
+        return error_response
 
-    token = cookies.removeprefix("Bearer ")
+    if not validateSession(payload['email'], payload['token_version']):
+        error_response = JSONResponse(status_code=401, content={"message" : "Sessão expirada"})
+        error_response.delete_cookie("access_token", path="/")
+        return error_response
 
-    payload = jwt.decode(
-        token,
-        SECRET_KEY,
-        algorithms=['HS256']
-    )
     email = payload['email']
-
-
 
     db_response = supabase.table("users").select("name, address, email, CPF, avatar_url").eq("email", email).execute()
     usuario = db_response.data[0]
-
 
     return {"User" : usuario}
 
@@ -250,15 +247,14 @@ async def UpdateInfo(request: Request, user:userInfoAdd, response:Response):
     user_token_version = aumentarToken(email=email)
     newToken =generateNewToken(user_result.data[0], user_token_version, remember)
     response.set_cookie(
-                    key = "access_token",
-                    value = f"Bearer {newToken}".strip(),
-                    httponly = True,
-                    max_age = 345600,
-                    samesite = "lax",
-                    secure = False
+        key = "access_token",
+        value = f"Bearer {newToken}".strip(),
+        httponly = True,
+        max_age = 345600,
+        samesite = "lax",
+        secure = False
                 )
     return {"User": patchUser.data[0]}
-
 
 
 @router.delete("/exclude")
