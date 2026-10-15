@@ -1,3 +1,7 @@
+import HeroCard from "./HeroCard"
+
+
+
 export default function Hero() {
     return (
         <section className="mx-auto mt-8 w-full max-w-6xl px-4 sm:px-6" aria-labelledby="hero-title">
@@ -29,6 +33,11 @@ export default function Hero() {
                     alt="Descrição da imagem"
                     className="-ml-3 h-60 w-full object-cover sm:h-80 lg:h-96"
                 />
+                </div>
+            </div>
+            <div className="mt-15 flex flex-row">
+                <div>
+                    <HeroCard children="Seus produtos chegam com toda segurança!" title="Entrega Segura" icon="fa-solid fa-truck"/>
                 </div>
             </div>
         </section>
