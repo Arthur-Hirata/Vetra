@@ -1,4 +1,4 @@
-import HeroCard from "./HeroCard"
+import HeroCard from "../HeroCard"
 
 
 
@@ -35,10 +35,10 @@ export default function Hero() {
                 />
                 </div>
             </div>
-            <div className="mt-15 flex flex-row">
-                <div>
+            <div className="mt-15 flex flex-row gap-10 -ml-4">
                     <HeroCard children="Seus produtos chegam com toda segurança!" title="Entrega Segura" icon="fa-solid fa-truck"/>
-                </div>
+                    <HeroCard children="Seus dados e compras sempre protegidos" title="Pagamento protegido" icon="fa-solid fa-shield-halved"/>
+                    <HeroCard children="Pessoas reais, negócios reais, mais oportunidades" title="Comunidade Vetra" icon="fa-solid fa-people-group"/>
             </div>
         </section>
     )

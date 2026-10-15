@@ -1,4 +1,4 @@
-import Hero from "../../Components/Hero"
+import Hero from "./Components/Hero/Hero"
 function Home(){
     return(
         <div className="h-screen w-full">
