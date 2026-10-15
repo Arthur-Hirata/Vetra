@@ -6,7 +6,7 @@ function MainLayout(){
     return (
         <div className="bg-background pt min-h-screen text-text font-poppins w-full border border-border flex flex-col items-center">
             <Navbar/>
-            <main>
+            <main className="w-full">
                 <Outlet/>
             </main>
             <Footer/>

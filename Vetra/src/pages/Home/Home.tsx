@@ -1,9 +1,10 @@
 import Hero from "./Components/Hero/Hero"
+import Categories from "./Components/Categories/Categories"
 function Home(){
     return(
-        <div className="h-screen w-full">
+        <div className="min-h-screen w-full">
             <Hero/>
-            
+            <Categories />
         </div>
         
     )

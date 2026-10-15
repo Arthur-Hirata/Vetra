@@ -59,8 +59,8 @@ function Navbar(){
 
                 <div className="hidden items-center gap-6 lg:flex">
                     <HoverSpan message="Início" />
-                    <HoverSpan message="Produtos" />
                     <HoverSpan message="Categorias" />
+                    <HoverSpan message="Produtos" />
                     <HoverSpan message="Vender" />
                 </div>
 
