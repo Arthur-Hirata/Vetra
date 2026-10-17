@@ -1,2 +1,2 @@
 # Vetra
-E-commerce feito com typescript, tailwindcss, react, python e postgresql em produção 
+E-commerce feito com typescript, tailwindcss, react, python e postgresql em produção
