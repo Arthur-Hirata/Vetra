@@ -7,7 +7,7 @@ interface CategoriesCardProps{
 
 export default function CategoriesCard({image, title, productsAmount, ref}:CategoriesCardProps){
     return (
-        <div className="bg-cards w-60 h-60  rounded-md object-cover">
+        <div className="bg-cards w-60 h-60  rounded-md object-cover transition:transform duration-300 hover:scale-105">
             <div className="bg-greenBg w-60 h-40 flex items-center justify-center rounded-md">
                 <img src={image} alt="" className="w-30 h-30"/>
             </div>
