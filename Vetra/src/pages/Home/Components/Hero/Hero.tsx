@@ -13,7 +13,7 @@ export default function Hero() {
                     </span>
 
                     <h1 id="hero-title" className="mt-6 text-4xl font-semibold leading-tight tracking-tight text-text sm:text-5xl">
-                        Tudo que você precisa em um só lugar
+                        Tudo que você precisa em um só lugar.
                     </h1>
 
                     <p className="mt-5 max-w-lg text-base leading-7 text-text-secondary sm:text-lg">
