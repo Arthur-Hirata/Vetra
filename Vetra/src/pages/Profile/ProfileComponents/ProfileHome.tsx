@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { deleteUser } from "../../../services/api"
 import ConfimationModal from "../../../Components/ConfimationModal"
+import { useNavigate } from "react-router-dom"
 import type { ProfileData } from "../Profile"
 
 interface ProfileHomeProps {
@@ -9,7 +10,7 @@ interface ProfileHomeProps {
 
 export default function ProfileHome({ profile }: ProfileHomeProps){
         const [isDeleteModalOpen,setIsDeleteModalOpen] = useState(false)
-    
+        const navigate = useNavigate()
         function handleDelete(){
             setIsDeleteModalOpen(true)
         }
@@ -29,11 +30,22 @@ export default function ProfileHome({ profile }: ProfileHomeProps){
     
     return(
         <div >
-             <section id="overview" className="border-b border-border pb-6">
-                    <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-primary">Minha conta</p>
-                    <h1 className="text-3xl font-semibold text-text sm:text-4xl">Olá, {profile.name || "seja bem-vindo"}.</h1>
-                    <p className="mt-2 max-w-2xl text-sm leading-6 text-text-secondary">Gerencie suas informações pessoais e preferências da conta.</p>
-            </section>
+             <section id="overview" className="flex justify-between gap-4 border-b border-border pb-6">
+    <div>
+        <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-primary">Minha conta</p>
+        <h1 className="text-3xl font-semibold text-text sm:text-4xl">
+            Olá, {profile.name || "seja bem-vindo"}.
+        </h1>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-text-secondary">
+            Gerencie suas informações pessoais e preferências da conta.
+        </p>
+    </div>
+
+    <div className="flex flex-row justify-center gap-3">
+        <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-primary">Voltar para a página principal</p>
+        <i className="fas fa-arrow-right  text-primary transform:transition duration-300 hover:scale-105" onClick={()=> navigate("/")}></i>
+    </div>
+</section>
             
              <section className="grid gap-4 sm:grid-cols-2">
                     <div className="rounded-md border border-border bg-cards p-5 shadow-card">
@@ -59,7 +71,7 @@ export default function ProfileHome({ profile }: ProfileHomeProps){
                                     <div id="address" className="rounded-md border border-border bg-cards p-5 shadow-card">
                                         <div className="mb-5 flex items-center justify-between">
                                             <div>
-                                                <p className="text-sm text-text-secondary">Entrega</p>
+                                                <p className="text-sm text-text-secondary">Entrega/Despache</p>
                                                 <h2 className="mt-1 text-lg font-semibold text-text">Meu endereço</h2>
                                             </div>
                                             <i className="fa-solid fa-location-dot text-xl text-primary" />

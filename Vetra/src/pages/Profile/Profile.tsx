@@ -19,26 +19,25 @@ export default function Profile(){
     const [profile, setProfile] = useState<ProfileData | null> (null)
     const [section, setSection] = useState<Section>("home")
     const navigate = useNavigate()
-    useEffect(() => {
-        async function loadProfile() {
-            try {
-                const data = await getProfile()
-                setProfile({
-                    name: data.User.name,
-                    email: data.User.email,
-                    address: data.User.address,
-                    CPF : data.User.CPF,
-                    avatar_url : data.User.avatar_url
-                })
-            } catch (error: unknown) {
-                if (error instanceof Error && error.message === "Usuário não autenticado") {
-                    navigate("/")
-                } else {
-                    console.error("Não foi possível carregar o perfil:", error)
-                }
+    async function loadProfile() {
+        try {
+            const data = await getProfile()
+            setProfile({
+                name: data.User.name,
+                email: data.User.email,
+                address: data.User.address,
+                CPF : data.User.CPF,
+                avatar_url : data.User.avatar_url
+            })
+        } catch (error: unknown) {
+            if (error instanceof Error && error.message === "Usuário não autenticado") {
+                navigate("/")
+            } else {
+                console.error("Não foi possível carregar o perfil:", error)
             }
         }
-
+    }
+    useEffect(() => {
         void loadProfile()
     }, [navigate])
 
@@ -84,7 +83,7 @@ export default function Profile(){
                     {section === "home" && profile && <ProfileHome profile={profile} />}
                     {section === "info"&& (
                          <Suspense fallback={<p>Carregando seção...</p>}>
-                            <AddInfo profile={profile} />
+                            <AddInfo profile={profile} onProfileUpdated={loadProfile}/>
                         </Suspense>
                     )}
                     {section === "cart" && (
@@ -97,6 +96,7 @@ export default function Profile(){
                             <ProfleSells />
                         </Suspense>
                     )}
+
                 </main>
     
             </div>

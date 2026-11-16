@@ -7,9 +7,10 @@ import ConfimationModal from "../../../Components/ConfimationModal"
 import Notification from "../../../Components/Notification"
 interface AddInfoProfileProps {
     profile: ProfileData
+    onProfileUpdated:() => Promise<void>
 }
 
-export default function AddInfo({ profile }: AddInfoProfileProps) {
+export default function AddInfo({ profile, onProfileUpdated }: AddInfoProfileProps) {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [notificationVisible, setNotificationVisible] = useState(false)
     const [userName, setUserName] = useState(profile.name ?? "")
@@ -32,6 +33,7 @@ export default function AddInfo({ profile }: AddInfoProfileProps) {
     async function updateUserinfo() {
         try{
             await updateUser(userName, address, CPF, avatar_url)
+            await onProfileUpdated()
             setIsModalOpen(false)
             setNotificationVisible(true)
         }
@@ -57,7 +59,7 @@ export default function AddInfo({ profile }: AddInfoProfileProps) {
 
                 <img src={!profile?.avatar_url ? "foto.jpg" : profile.avatar_url}  className="h-35 w-35 rounded-full object-cover items-center flex justify-center" />
                 <Input value={userName} subTittle="Nome" type="text" classname="w-100" onChange={(e) => setUserName(e.target.value)}/>
-                <Input value={address} subTittle="Endereço" type="text" classname="w-100" placeholder={profile.address ? "" : "Informe seu endereço"} onChange={(e) => setAddress(e.target.value)}/>
+                <Input value={address} subTittle="  Cidade-Estado" type="text" classname="w-100" placeholder={profile.address ? "" : "Informe CEP (Cidade-Estado)"} onChange={(e) => setAddress(e.target.value)}/>
                 <Input value={CPF} subTittle="CPF" type="text"  classname={cpfError ? "border-red-600 w-100" : "w-100"} placeholder={profile.CPF ? "" : "Informe seu CPF"} onChange={(e) => setCPF(e.target.value)} spanError={cpfError}/>
                 <Input value={avatar_url}  type="text" subTittle="Foto de perfil" classname="w-100" placeholder={profile.avatar_url ? "" : "Adicione uma foto de perfil"} onChange={(e) => setAvatar_url(e.target.value)} />
                 <Button children="Continuar" className="mt-5" onClick={HandleUpdate}/>
