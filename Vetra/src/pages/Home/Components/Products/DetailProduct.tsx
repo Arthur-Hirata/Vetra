@@ -1,10 +1,8 @@
-interface ProductProps{
-    product_id :number
-}
+import { useParams } from "react-router-dom"
 
-
-export default function DetailProduct({product_id} : ProductProps){
+export default function DetailProduct(){
+    const {id} = useParams<{id:string}>()
     return (
-        <div> {product_id}</div>
+        <div>{id}</div>
     )
 }

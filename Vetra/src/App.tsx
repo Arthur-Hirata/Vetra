@@ -5,6 +5,7 @@ import Login from './pages/Login/Login'
 import AccountCreate from './pages/AccountCreate/AccountCreate'
 import TooManyRequests from './pages/TooManyRequests/TooManyRequests'
 import Profile from './pages/Profile/Profile'
+import DetailProduct from './pages/Home/Components/Products/DetailProduct'
 import './App.css'
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route element={<MainLayout/>}>
           <Route path="/" element={<Home/>} />
+          <Route path='/products/:id' element={<DetailProduct/>}/>
         </Route>
         <Route path="/login"element={<Login/>}/>
         <Route path='/create' element={<AccountCreate />}/>
