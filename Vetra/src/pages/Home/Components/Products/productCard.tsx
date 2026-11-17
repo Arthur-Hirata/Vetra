@@ -4,13 +4,14 @@ interface ProductProps{
     picture_url : string
     price : number
     seller : string
+    condition :string
     seller_picture:string
     category:string
     location:string
 
 }
 
-export default function ProductCard({title, picture_url, price, seller, seller_picture, category, location}: ProductProps){
+export default function ProductCard({title, picture_url, price, seller, seller_picture, category,condition, location}: ProductProps){
     return (
         <div className="flex flex-col bg-white h-90 w-65 rounded-xl p-2 shadow-card transition-transform duration-300 hover:scale-105">
 
@@ -27,9 +28,15 @@ export default function ProductCard({title, picture_url, price, seller, seller_p
             </div>
 
             <div className="mt-2 flex flex-col gap-1">
+                <div className="flex flex-row gap-30 items-center">
                 <h5 className="text-xs text-text-secondary">
                     {category}
                 </h5>
+                
+                <div className={condition == "Novo" ? "w-20 h-4 rounded-full bg-greenBg" : "w-20 h-4 rounded-full bg-amber-100"}>
+                    <h5 className={condition == "Novo" ? "text-xs text-green text-center":"text-xs text-yellow-600 text-center"}>{condition}</h5>
+                </div>
+                </div>
 
                 <h3 className="font-semibold text-sm truncate">
                     {title}
