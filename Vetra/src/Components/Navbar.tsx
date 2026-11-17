@@ -3,8 +3,8 @@ import HoverSpan from "./HoverSpan"
 import Input from "./Input"
 import { useNavigate } from "react-router-dom"
 import { useCallback, useEffect, useState } from "react"
-import { getCurrentUser } from "../services/api"
-import { Logout } from "../services/api"
+import { getCurrentUser } from "../services/AuthApi"
+import { Logout } from "../services/AuthApi"
 
 function Navbar(){
     const navigate = useNavigate()

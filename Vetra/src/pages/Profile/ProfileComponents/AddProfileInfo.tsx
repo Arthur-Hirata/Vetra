@@ -1,4 +1,4 @@
-import { updateUser } from "../../../services/api"
+import { updateUser } from "../../../services/AuthApi"
 import Input from "../../../Components/Input"
 import Button from "../../../Components/Button"
 import { useState } from "react"

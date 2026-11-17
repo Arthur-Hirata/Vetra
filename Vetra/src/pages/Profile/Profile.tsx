@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from "react"
-import { getProfile } from "../../services/api"
+import { getProfile } from "../../services/AuthApi"
 import { useNavigate } from "react-router-dom"
 import ProfileHome from "./ProfileComponents/ProfileHome"
 type Section = "home" | "info" | "cart" | "sells"

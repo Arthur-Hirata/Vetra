@@ -2,7 +2,7 @@ import Input from "../../Components/Input"
 import Button from "../../Components/Button"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { login } from "../../services/api"
+import { login } from "../../services/AuthApi"
 import Toast from "../../Components/Toast"
 
 

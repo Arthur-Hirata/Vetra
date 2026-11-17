@@ -2,7 +2,7 @@ import Input from "../../Components/Input"
 import Button from "../../Components/Button"
 import Toast from "../../Components/Toast"
 import { useState } from "react"
-import { register } from "../../services/api"
+import { register } from "../../services/AuthApi"
 import { useNavigate } from "react-router-dom"
 interface ApiError extends Error {
     data?:{

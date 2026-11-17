@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { deleteUser } from "../../../services/api"
+import { deleteUser } from "../../../services/AuthApi"
 import ConfimationModal from "../../../Components/ConfimationModal"
 import { useNavigate } from "react-router-dom"
 import type { ProfileData } from "../Profile"

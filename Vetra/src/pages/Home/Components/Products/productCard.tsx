@@ -1,5 +1,6 @@
 import Button from "../../../../Components/Button"
 interface ProductProps{
+    product_id : number
     title:string
     picture_url : string
     price : number
@@ -8,10 +9,14 @@ interface ProductProps{
     seller_picture:string
     category:string
     location:string
-
 }
-
-export default function ProductCard({title, picture_url, price, seller, seller_picture, category,condition, location}: ProductProps){
+import DetailProduct from "./DetailProduct"
+export default function ProductCard({product_id, title, picture_url, price, seller, seller_picture, category,condition, location}: ProductProps){
+    
+    function productDetails(){
+        <DetailProduct product_id={product_id} />
+    }
+    
     return (
         <div className="flex flex-col bg-white h-90 w-65 rounded-xl p-2 shadow-card transition-transform duration-300 hover:scale-105">
 
@@ -67,7 +72,7 @@ export default function ProductCard({title, picture_url, price, seller, seller_p
                     </span>
                 </div>
             </div>
-            <Button children="Ver detalhes" className="text-sm w-45 h-10 mt-4 justify ml-7"/>
+            <Button children="Ver detalhes" className="text-sm w-45 h-10 mt-4 justify ml-7" onClick={productDetails}/>
         </div>
     );
 }
