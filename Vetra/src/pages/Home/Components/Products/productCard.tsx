@@ -13,18 +13,15 @@ interface ProductProps{
 }
 export default function ProductCard({product_id, title, picture_url, price, seller, seller_picture, category,condition, location}: ProductProps){
     const navigate = useNavigate()
-
-    
     return (
         <div className="flex flex-col bg-white h-90 w-65 rounded-xl p-2 shadow-card transition-transform duration-300 hover:scale-105">
 
-            <div className="relative bg-greenBg w-full h-38 flex items-center justify-center rounded-md">
+            <div className="relative bg-white w-full h-38 flex items-center justify-center rounded-md">
                 <img
                     src={picture_url}
                     alt={title}
                     className="w-full h-full object-contain rounded-md"
                 />
-
                 <button className="absolute top-2 right-2 bg-white rounded-full p-2">
                     <i className="fa-solid fa-heart text-green"></i>
                 </button>
