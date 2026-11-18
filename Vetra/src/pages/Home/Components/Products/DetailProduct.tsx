@@ -13,22 +13,27 @@ export default function DetailProduct(){
                 <p>{'>'}</p>
                 <p className="trasnform:transition duration-300 hover:scale-105 hover:cursor-pointer">Fone de ouvido</p>
             </div>
-            <div className="flex flex-row gap-30">
-                <div className="flex flex-row mt-10 ">
+            <div className="flex flex-row gap-20">
+                <div className="flex flex-row mt-10 gap-10">
                     <div className="w-150 h-120 rounded-md bg-white p-4 flex items-center justify-center">
                         <img className="max-w-full max-h-full object-contain" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6gjYOrS7JKHXirTmaMlueUrAiraVbYtmrKyExRAhZo65BB0RvVhbxM38&s=10" alt=""/>
-               
-                    <div>
+                    </div>
+                    <div className="flex flex-col gap-5">
                         <div className="w-35 h-7 rounded-full bg-greenBg">
                             <p className="text-md text-green text-center font-bold">Eletrônicos</p>
                         </div>
-                    </div>
+                        <div className="flex flex-col gap-4 mt-3">
+                            <p className="w-120 text-4xl font-bold">AirPods Pro (2° Geração)</p>
+                            <p className="text-5xl text-green font-semibold">R$ 299.99</p>
+                            <hr />
+                            <p>Som incrível, cancelamento de ruído e muito mais conforto.</p>
+                        </div>
                     </div>
                 </div>
             
-            <div className="bg-cards w-70 h-90 rounded-md mt-10">
+                <div className="bg-cards w-70 h-90 rounded-md mt-10">
 
-            </div>
+                </div>
             </div>
 
         </div>
