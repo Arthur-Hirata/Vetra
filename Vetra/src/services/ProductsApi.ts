@@ -27,3 +27,21 @@ export async function getProducts(id:number) {
     return data
 }
 
+export async function getDetailProduct(id:number){
+    const response = await fetch(`${API_URL}/detail/${id}`, {
+        method : "GET",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+    const data = await response.json()
+    if (!response.ok){
+        throw new ApiError(
+            data.mensagem || data.message || "Erro pegar produtos",
+            data
+        )
+    } 
+    return data
+}
+
+
