@@ -28,7 +28,7 @@ export async function getProducts(id:number) {
 }
 
 export async function getDetailProduct(id:number){
-    const response = await fetch(`${API_URL}/detail/${id}`, {
+    const response = await fetch(`${API_URL}/products/detail/${id}`, {
         method : "GET",
         headers: {
             "Content-Type": "application/json",

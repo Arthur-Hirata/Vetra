@@ -69,8 +69,8 @@ async def getProduct(id):
         },
     }
 
-@router.get("/detail/${id}")
-async def getDetailProduct():
+@router.get("/detail/{id}")
+async def getDetailProduct(id):
     product_result = (
             supabase.table("products")
             .select("title, quantity, price, seller_id, category_id, image_url, condition, description, subtitle")
@@ -111,6 +111,8 @@ async def getDetailProduct():
         "price": product["price"],
         "image_url": product["image_url"],
         "condition": product["condition"],
+        "subtitle" : product['subtitle'],
+        "description" : product['description'],
         "category": categories.get(product["category_id"]),
         "seller": {
             "id": product["seller_id"],
