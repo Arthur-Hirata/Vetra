@@ -51,7 +51,7 @@ export default function DetailProduct(){
                         <i className="fa-solid fa-location-dot text-green font-bold text-2xl"></i>
                         <p className="text-text-secondary truncate0">Maringá-PR</p>
                     </div>
-                        <button className="mt-5 w-50 h-30 rounded-lg border border-green text-green self-center">Ver loja</button>
+                        <button className="mt-5 w-50 h-30 rounded-lg border border-green text-green self-center transform:transition duration-300 hover:scale-105 hover:cursor-pointer">Ver loja</button>
                 </div>
             </div>
             <div className="mt-20">
