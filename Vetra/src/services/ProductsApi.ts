@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000/products"
+const API_URL = "http://localhost:8000"
 class ApiError extends Error{
     data:{
         wait_time?:number
@@ -11,7 +11,7 @@ class ApiError extends Error{
 }
 
 export async function getProducts(id:number) {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${API_URL}/products/${id}`, {
         method : "GET",
         headers: {
             "Content-Type": "application/json",
