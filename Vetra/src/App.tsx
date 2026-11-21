@@ -6,6 +6,7 @@ import AccountCreate from './pages/AccountCreate/AccountCreate'
 import TooManyRequests from './pages/TooManyRequests/TooManyRequests'
 import Profile from './pages/Profile/Profile'
 import DetailProduct from './pages/Home/Components/Products/DetailProduct'
+import CategoriesSection from './pages/Home/Components/Categories/CategoriesSection'
 import './App.css'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route element={<MainLayout/>}>
           <Route path="/" element={<Home/>} />
           <Route path='/products/:id' element={<DetailProduct/>}/>
+          <Route path='/categories/:categorySlug' element={<CategoriesSection/>}/>
         </Route>
         <Route path="/login"element={<Login/>}/>
         <Route path='/create' element={<AccountCreate />}/>

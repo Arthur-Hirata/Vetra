@@ -1,11 +1,13 @@
+import { useNavigate } from "react-router-dom"
 interface CategoriesCardProps{
     image:string
     title:string
     productsAmount:string
-    ref?:string
+    categorySlug:string
 }
 
-export default function CategoriesCard({image, title, productsAmount, ref}:CategoriesCardProps){
+export default function CategoriesCard({image, title, productsAmount, categorySlug}:CategoriesCardProps){
+    const navigate = useNavigate()
     return (
         <div className="bg-cards w-60 h-60  rounded-md object-cover transition:transform duration-300 hover:scale-105">
             <div className="bg-greenBg w-60 h-40 flex items-center justify-center rounded-md">
@@ -17,7 +19,7 @@ export default function CategoriesCard({image, title, productsAmount, ref}:Categ
                     <span className="text-gray-400">{productsAmount}+ produtos</span>
                     <div>
                         <div className="w-7 h-7 flex justify-center items-center rounded-full bg-whiteGreen text-white transition:transform duration-300 hover:scale-105 hover:cursor-pointer">
-                            <a href={ref}><i className="fas fa-arrow-right text-sm"></i></a>
+                            <i className="fas fa-arrow-right text-sm" onClick={()=> navigate(`/categories/${categorySlug}`)}></i>
                         </div>
                     </div>
                 </div>

@@ -14,6 +14,7 @@ router = APIRouter()
 
 
 
+
 @router.get("/{id}")
 async def getProduct(id):
     product_result = (

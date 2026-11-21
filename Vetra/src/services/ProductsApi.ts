@@ -45,3 +45,4 @@ export async function getDetailProduct(id:number){
 }
 
 
+
