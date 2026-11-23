@@ -99,7 +99,7 @@ export default function ProductCard({product_id} :ProductCardPropos){
                     </span>
                 </div>
             </div>
-            <Button children="Ver detalhes" className="text-sm w-45 h-10 mt-4 justify ml-7" onClick={() =>  navigate(`products/${product_id}`)}/>
+            <Button children="Ver detalhes" className="text-sm w-45 h-10 mt-4 justify ml-7" onClick={() =>  navigate(`/products/${product_id}`)}/>
         </div>
     );
 }

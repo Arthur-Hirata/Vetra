@@ -122,7 +122,7 @@ async def getDetailProduct(id):
             "address": seller["address"],
         },
     }
-@router.get("/{section_id}")
+@router.get("/category/{section_id}")
 def getSection(section_id:int):
 
 

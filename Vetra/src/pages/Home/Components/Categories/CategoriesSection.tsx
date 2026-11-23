@@ -1,14 +1,25 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { categories } from "../../../../data/categories"
+import { getCategory } from "../../../../services/ProductsApi"
+import ProductCard from "../Products/productCard"
+import { useEffect, useState } from "react"
 export default function CategorySection(){
     const navigate = useNavigate()
+    const [products, setProducts] = useState<any[]>([])
     const {categorySlug} = useParams()
     const category = categories.find(
         item => item.slug === categorySlug
     )
     const categoryId = category?.id
     const categoryName = category?.name
-    console.log(categoryId)
+    useEffect(()=>{
+        if (!categoryId) return 
+        getCategory(Number(categoryId))
+        .then(setProducts)
+        .catch((error) => console.log(error))
+    }, [categoryId])
+
+
     return (
         <div className="flex flex-col mb-140 ml-20 mr-20">
             <div className="flex flex-row gap-10 mt-4 items-center">
@@ -57,6 +68,11 @@ export default function CategorySection(){
                     <option value="highest">Maior preço</option>
                 </select>
 
+            </div>
+            <div className="mt-14 grid grid-cols-4">
+                {products.map((product) => (
+                   <ProductCard product_id={product.id} key={product.id} />
+                ))}
             </div>
         </div>
     )
