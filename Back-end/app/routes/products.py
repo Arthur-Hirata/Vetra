@@ -122,3 +122,19 @@ async def getDetailProduct(id):
             "address": seller["address"],
         },
     }
+@router.get("/{section_id}")
+def getSection(section_id:int):
+
+
+    productList = (
+         supabase.table("products")
+         .select("*")
+         .eq("category_id", section_id)
+         .execute()
+    )
+    if not productList.data:
+        return JSONResponse(
+            status_code=404,
+            content={"message": "Nenhum produto encontrado nesta seção"},
+        )
+    return productList.data   
