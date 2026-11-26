@@ -59,5 +59,20 @@ export async function getCategory(id:number) {
     }
     return data
 }
-
+export async function  getAllProducts() {
+    const response = await fetch(`${API_URL}/products/AllProducts`, {
+        method : "GET",
+        headers : {
+            "Content-Type": "application/json",
+        }
+    })
+    const data = await response.json()
+    if (!response.ok){
+        throw new ApiError(
+            data.mensagem || data.message || "Erro pegar categoria",
+            data
+        )
+    }
+    return data
+}
 

@@ -1,15 +1,7 @@
-from fastapi import APIRouter, Response, Request
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from app.config import SECRET_KEY
 from app.database import supabase
-from app.middleware.middleware import rate_limit
-from pydantic import BaseModel
-from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime, timedelta, timezone
-import jwt
-from typing import Optional
-from functools import wraps
-from postgrest.exceptions import APIError
+import random
 router = APIRouter()
 
 
@@ -137,4 +129,20 @@ def getSection(section_id:int):
             status_code=404,
             content={"message": "Nenhum produto encontrado nesta seção"},
         )
-    return productList.data   
+    return productList.data
+
+@router.get("/AllProducts")
+def getAllProducts():
+    res_ids = supabase.table("products").select("id").execute()
+    todos_ids = [item['id'] for item in res_ids.data]
+    if not todos_ids:
+        return []
+    else:
+        quantity = min(50, len(todos_ids))
+        ids_sorteados = random.sample(todos_ids, quantity)
+
+        db_response = supabase.table("products").select("*").in_("id", ids_sorteados).execute()
+        ramdon_lines = db_response.data
+        random.shuffle(ramdon_lines)
+        return ramdon_lines
+        
