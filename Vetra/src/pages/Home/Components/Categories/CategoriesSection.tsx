@@ -7,6 +7,7 @@ export default function CategorySection(){
     const navigate = useNavigate()
     const [products, setProducts] = useState<any[]>([])
     const {categorySlug} = useParams()
+    const [sortOrder, setSortOrder] = useState<"lowest" | "highest">("lowest")
     const category = categories.find(
         item => item.slug === categorySlug
     )
@@ -18,7 +19,12 @@ export default function CategorySection(){
         .then(setProducts)
         .catch((error) => console.log(error))
     }, [categoryId])
-
+    const sortedProdutcs = [...products].sort((a, b) => {
+        if (sortOrder == "lowest"){
+            return a.price - b.price
+        }
+        return b.price - a.price
+    })
 
     return (
         <div className="flex flex-col mb-140 ml-20 mr-20">
@@ -61,17 +67,21 @@ export default function CategorySection(){
                     </p>
                 </div>
 
-                <select className="bg-white border border-border rounded-lg px-4 py-2.5 text-sm text-text outline-none focus:border-green cursor-pointer">
-                    <option value="recent">Mais recentes</option>
-                    <option value="oldest">Mais antigos</option>
+                <select className="bg-white border border-border rounded-lg px-4 py-2.5 text-sm text-text outline-none focus:border-green cursor-pointer"
+                    value={sortOrder}
+                    onChange={(event) => setSortOrder(event.target.value as "lowest" | "highest")}
+                                >
                     <option value="lowest">Menor preço</option>
                     <option value="highest">Maior preço</option>
                 </select>
 
             </div>
             <div className="mt-14 grid grid-cols-4">
-                {products.map((product) => (
-                   <ProductCard product_id={product.id} key={product.id} />
+                {sortedProdutcs.map((product) => (
+                    <ProductCard
+                    product_id={product.id}
+                        key={product.id}
+                                />
                 ))}
             </div>
         </div>
