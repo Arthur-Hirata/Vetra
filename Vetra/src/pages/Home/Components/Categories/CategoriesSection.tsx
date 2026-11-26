@@ -8,6 +8,9 @@ export default function CategorySection(){
     const [products, setProducts] = useState<any[]>([])
     const {categorySlug} = useParams()
     const [sortOrder, setSortOrder] = useState<"lowest" | "highest">("lowest")
+    const [search, setSearch] = useState("")
+    
+    
     const category = categories.find(
         item => item.slug === categorySlug
     )
@@ -19,12 +22,17 @@ export default function CategorySection(){
         .then(setProducts)
         .catch((error) => console.log(error))
     }, [categoryId])
-    const sortedProdutcs = [...products].sort((a, b) => {
-        if (sortOrder == "lowest"){
-            return a.price - b.price
-        }
-        return b.price - a.price
-    })
+    const filterProducts = [...products]
+    .filter((product)=>
+        product.title.
+        toLowerCase().
+        includes(search.toLowerCase().trim())
+    )
+    .sort((a,b) => 
+        sortOrder === "lowest"
+        ? a.price - b.price
+        : b.price - a.price
+    )
 
     return (
         <div className="flex flex-col mb-140 ml-20 mr-20">
@@ -66,7 +74,15 @@ export default function CategorySection(){
                         Explore os produtos desta categoria
                     </p>
                 </div>
-
+                <div className="relative hidden sm:block">
+                <i className="fas fa-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-text-secondary" aria-hidden="true" />
+                <input 
+                    value={search}
+                    type="text" placeholder="Pesquise o produto que deseja"     
+                    className="w-120 text-center  h-12 rounded-xl border border-border bg-white px-4 text-sm text-text placeholder:text-text-secondary shadow-[0_4px_12px_rgba(30,41,59,0.03)] transition-all duration-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    onChange={(event) => setSearch(event.target.value)}
+                />
+                </div>
                 <select className="bg-white border border-border rounded-lg px-4 py-2.5 text-sm text-text outline-none focus:border-green cursor-pointer"
                     value={sortOrder}
                     onChange={(event) => setSortOrder(event.target.value as "lowest" | "highest")}
@@ -77,7 +93,7 @@ export default function CategorySection(){
 
             </div>
             <div className="mt-14 grid grid-cols-4">
-                {sortedProdutcs.map((product) => (
+                {filterProducts.map((product) => (
                     <ProductCard
                     product_id={product.id}
                         key={product.id}
