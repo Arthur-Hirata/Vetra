@@ -116,8 +116,6 @@ async def getDetailProduct(id):
     }
 @router.get("/category/{section_id}")
 def getSection(section_id:int):
-
-
     productList = (
          supabase.table("products")
          .select("*")
@@ -133,16 +131,13 @@ def getSection(section_id:int):
 
 @router.get("/AllProducts")
 def getAllProducts():
-    res_ids = supabase.table("products").select("id").execute()
-    todos_ids = [item['id'] for item in res_ids.data]
-    if not todos_ids:
-        return []
-    else:
-        quantity = min(50, len(todos_ids))
-        ids_sorteados = random.sample(todos_ids, quantity)
+    db_response = supabase.table("products").select("*").execute()
+    if not db_response:
+         return JSONResponse(
+              status_code=404,
+              content={"mensagem" : "Erro ao buscar produtos"},
+         )
+    return db_response.data
 
-        db_response = supabase.table("products").select("*").in_("id", ids_sorteados).execute()
-        ramdon_lines = db_response.data
-        random.shuffle(ramdon_lines)
-        return ramdon_lines
+
         
